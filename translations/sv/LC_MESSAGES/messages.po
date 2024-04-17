@@ -1,0 +1,84 @@
+# Swedish translations for PROJECT.
+# Copyright (C) 2024 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2024-04-16 18:31+0300\n"
+"PO-Revision-Date: 2024-04-16 16:43+0300\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: sv\n"
+"Language-Team: sv <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: app.py:51
+msgid "Subject"
+msgstr "Ämne"
+
+#: app.py:53
+msgid "General feedback"
+msgstr "Allmän respons"
+
+#: app.py:54
+msgid "Material procurement"
+msgstr "Anskaffning av nytt material"
+
+#: app.py:55
+msgid "Material error"
+msgstr "Fel i materialet"
+
+#: app.py:56
+msgid "Technical problem"
+msgstr "Tekniskt problem"
+
+#: app.py:57
+msgid "Other"
+msgstr "Annat"
+
+#: app.py:61
+msgid "Message"
+msgstr "Meddelande"
+
+#: app.py:64
+msgid "My home municipality that receives this feedback"
+msgstr "Min hemkommun som hanterar denna respons"
+
+#: app.py:68
+msgid "Email address, if you want an answer to your feedback (Optional)"
+msgstr "Epostaddress, om du vill ha svar på din respons (Valfritt)"
+
+#: app.py:70
+msgid "Send"
+msgstr "Skicka"
+
+#: app.py:93
+msgid "English"
+msgstr "English "
+
+#: app.py:94
+msgid "Finnish"
+msgstr "Suomi "
+
+#: app.py:95
+msgid "Swedish"
+msgstr "Svenska "
+
+#: app.py:119
+msgid "Thank you for your feedback!"
+msgstr "Tack för din respons!"
+
+#: municipalities.py:44
+msgid "My home municipality is missing"
+msgstr "Min hemkommun fatts"
+
+#: municipalities.py:45
+msgid "I don't want to say"
+msgstr "Jag vill inte uppge"
+
