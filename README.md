@@ -23,11 +23,13 @@ To update the translations, run this:
 pybabel extract -F babel.cfg -o messages.pot . ; pybabel extract -F babel.cfg -k lazy_gettext -o messages.pot . ; pybabel update -i messages.pot -d translations -l fi ; pybabel update -i messages.pot -d translations -l sv ; pybabel update -i messages.pot -d translations -l en
 ```
 
-Write changes to the translations with
+Write changes to the translations with:
 
 ```
 $EDITOR translations/{fi,sv,en}/LC_MESSAGES/messages.po
 ```
+
+Then run this to compile the changes:
 
 ```
 pybabel compile -d translations
