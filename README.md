@@ -20,7 +20,7 @@ and run the app with
 To update the translations, run this:
 
 ```
-pybabel extract -F babel.cfg -o messages.pot . ; pybabel extract -F babel.cfg -k lazy_gettext -o messages.pot . ; pybabel update -i messages.pot -d translations -l fi ; pybabel update -i messages.pot -d translations -l sv
+pybabel extract -F babel.cfg -o messages.pot . ; pybabel extract -F babel.cfg -k lazy_gettext -o messages.pot . ; pybabel update -i messages.pot -d translations -l fi ; pybabel update -i messages.pot -d translations -l sv ; pybabel update -i messages.pot -d translations -l en
 ```
 
 Write changes to the translations with
