@@ -14,10 +14,6 @@
         <div class="h-100 d-flex justify-content-center align-items-center">
             <div>
 
-                {#
-                This isn't actually needed as the apps have translated strings as the URLs but can be used if that requirement is later added
-
-                #}
                 <div class="btn-group justify-content-center" role="group">
                 {% for language in languages %}
                     <button
@@ -35,7 +31,6 @@
 
                 {% block content %}{% endblock %}
             </div>
-
         </div>
     </div>
 
