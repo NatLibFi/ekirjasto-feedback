@@ -24,8 +24,10 @@ pybabel extract -F babel.cfg -o messages.pot . ; pybabel extract -F babel.cfg -k
 ```
 
 Write changes to the translations with
+
 ```
 $EDITOR translations/{fi,sv,en}/LC_MESSAGES/messages.po
+```
 
 ```
 pybabel compile -d translations
