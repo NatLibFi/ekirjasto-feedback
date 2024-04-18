@@ -80,7 +80,7 @@ class FeedbackForm(FlaskForm):
     )
 
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/palaute", methods=["GET", "POST"])
 def feedback(name=None):
     form = FeedbackForm()
     if request.method == "POST" and form.validate():
