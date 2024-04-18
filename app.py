@@ -35,8 +35,8 @@ import nh3
 app = Flask(__name__)
 
 # root path of the application can be set with the ROOT_PATH environment variable
-# If not set, it defaults to /palaute
-root_path = os.environ.get('ROOT_PATH', '/palaute')
+# If not set, it defaults to /
+root_path = os.environ.get('ROOT_PATH', '/')
 
 bootstrap = Bootstrap5(app)
 # https://github.com/marktennyson/flask-mailing
