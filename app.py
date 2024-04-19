@@ -100,9 +100,10 @@ def feedback(name=None):
             body,
             recipients,
         )
-        if not sent:
+        if sent:
+            return redirect(url_for("success"))
+        else:
             return redirect(url_for("error"))
-        return redirect(url_for("success"))
 
     # Getting these from config.py with translation didn't seem to work
     # Note that these are "translated" into the original language so every language displays "English" so you always find it
@@ -130,8 +131,11 @@ def send_email(subject, body, recipients):
     if type(recipients) is not list:
         raise ValueError("recipients must be a list")
 
+    # Prevents duplicates
+    recipients = list(set(recipients))
+
     message = Message(
-        subject, sender="e-kirjasto-tekniikka@helsinki.fi", recipients=recipients
+        subject, sender=app.config["MAIL_SENDER"], recipients=recipients
     )
     message.body = body
 
@@ -149,7 +153,7 @@ def save_message(message):
     """
     If sending the email fails for any reason, this is used to save the message to disk as a backup
     """
-    f = open("emergency_backup", "a", encoding="utf-8")
+    f = open(app.config["BACKUP_FILE"], "a", encoding="utf-8")
     f.write(message)
 
 @app.route(root_path + "/success")
