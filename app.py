@@ -1,6 +1,7 @@
 import secrets
 import sys
 import smtplib
+import os
 
 from flask import Flask
 from flask import render_template
@@ -32,6 +33,10 @@ from flask_mail import Mail
 import nh3
 
 app = Flask(__name__)
+
+# root path of the application can be set with the ROOT_PATH environment variable
+# If not set, it defaults to /
+root_path = os.environ.get('ROOT_PATH', '/')
 
 bootstrap = Bootstrap5(app)
 # https://github.com/marktennyson/flask-mailing
@@ -80,7 +85,7 @@ class FeedbackForm(FlaskForm):
     )
 
 
-@app.route("/palaute", methods=["GET", "POST"])
+@app.route(root_path, methods=["GET", "POST"])
 def feedback(name=None):
     form = FeedbackForm()
     if request.method == "POST" and form.validate():
@@ -147,13 +152,11 @@ def save_message(message):
     f = open("emergency_backup", "a", encoding="utf-8")
     f.write(message)
 
-
-@app.route("/success")
+@app.route(root_path + "/success")
 def success(name="success"):
     return render_template("success.html", thanks=_("Thank you for your feedback!"))
 
-
-@app.route("/error")
+@app.route(root_path + "/error")
 def error(name="error"):
     return render_template(
         "error.html", error=_("There was a problem sending your message.")
