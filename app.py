@@ -1,6 +1,7 @@
 import secrets
 import sys
 import smtplib
+import ssl
 import os
 
 from flask import Flask
@@ -23,12 +24,10 @@ from wtforms import (
 from wtforms.validators import DataRequired, Length
 from flask_babel import lazy_gettext as _
 from flask_babel import Babel
-from flask_mail import Message
 
 from municipalities import indexed_municipalities, index_to_email, index_to_name
 
 from flask import Flask
-from flask_mail import Mail
 
 import nh3
 
@@ -36,11 +35,10 @@ app = Flask(__name__)
 
 # root path of the application can be set with the ROOT_PATH environment variable
 # If not set, it defaults to /
-root_path = os.environ.get('ROOT_PATH', '/')
+root_path = os.environ.get("ROOT_PATH", "/")
 
 bootstrap = Bootstrap5(app)
-# https://github.com/marktennyson/flask-mailing
-from config import app, mail
+from config import app
 
 
 def get_locale():
@@ -134,16 +132,22 @@ def send_email(subject, body, recipients):
     # Prevents duplicates
     recipients = list(set(recipients))
 
-    message = Message(
-        subject, sender=app.config["MAIL_SENDER"], recipients=recipients
-    )
-    message.body = body
+    message = f"Subject: {subject}\n\n{body}"
+
+    context = ssl.create_default_context()
+    server = app.config["MAIL_SERVER"]
+    port = app.config["MAIL_PORT"]
+    sender_email = app.config["MAIL_SENDER"]
+    username = app.config["MAIL_USERNAME"]
+    password = app.config["MAIL_PASSWORD"]
 
     try:
-        mail.send(message)
-    except:
+        with smtplib.SMTP_SSL(server, port, context=context) as server:
+            server.login(username, password)
+            server.sendmail(sender_email, recipients, message)
+    except Exception as exception:
         save_message(
-            "TO: " + str(recipients) + "\n" + str(subject) + "\n" + str(body) + "\n\n"
+                f"exception: {exception}\nTO: {recipients}\n{subject}\n{body}\n\n"
         )
         return False
     return True
@@ -156,9 +160,11 @@ def save_message(message):
     f = open(app.config["BACKUP_FILE"], "a", encoding="utf-8")
     f.write(message)
 
+
 @app.route(root_path + "/success")
 def success(name="success"):
     return render_template("success.html", thanks=_("Thank you for your feedback!"))
+
 
 @app.route(root_path + "/error")
 def error(name="error"):

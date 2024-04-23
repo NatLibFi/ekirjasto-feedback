@@ -1,7 +1,6 @@
 import os
 import getpass
 from flask import Flask
-from flask_mail import Mail
 from dotenv import dotenv_values, load_dotenv
 
 load_dotenv()
@@ -16,5 +15,3 @@ app.config["LANGUAGES"] = {
     "fi": "Finnish",
     "sv": "Swedish",
 }
-
-mail = Mail(app)
