@@ -29,8 +29,6 @@ def index_to_name(index):
 
 
 def get_emails():
-    # TODO there is a bug where if the file isn't encoded in utf-8 it produces an error in the backup file like this:
-    # exception: 'ascii' codec can't encode character '\xe4' in position 23: ordinal not in range(128)
     with open(app.config["EMAILS_CSV"], encoding="utf-8", newline="") as csvfile:
         email_reader = csv.reader(
             csvfile,
