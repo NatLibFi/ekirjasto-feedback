@@ -5,6 +5,8 @@ import smtplib
 import ssl
 import os
 
+from datetime import datetime
+
 from flask import Flask
 from flask import render_template
 from flask import request
@@ -170,7 +172,10 @@ def send_email(subject, body, recipients, reply_to):
             server.login(username, password)
             server.sendmail(sender_email, recipients, message.as_string())
     except Exception as exception:
-        save_message(f"exception: {exception}\nTO: {recipients}\n{subject}\n{body}\n\n")
+        time = datetime.now()
+        save_message(
+            f"exception: {exception}\n{time}\nTO: {recipients}\n{subject}\n{body}\n\n"
+        )
         return False
     return True
 
