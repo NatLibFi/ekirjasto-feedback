@@ -97,10 +97,12 @@ def feedback(name=None):
             index_to_email(int(form.municipality.data)),
             app.config["ALWAYS_RECIPIENT"],
         ]
+        reply_to = nh3.clean(form.email.data)
         sent = send_email(
             subject,
             body,
             recipients,
+            reply_to,
         )
         if sent:
             return redirect(url_for("success"))
@@ -123,7 +125,7 @@ def feedback(name=None):
     )
 
 
-def send_email(subject, body, recipients):
+def send_email(subject, body, recipients, reply_to):
     if type(subject) is not str:
         raise ValueError("subject must be a string")
 
@@ -136,7 +138,9 @@ def send_email(subject, body, recipients):
     # Prevents duplicates
     recipients = list(set(recipients))
 
-    message = f"Subject: {subject}\n\n{body}"
+    message = f"Subject: E-Kirjasto palaute: {subject}\n\n{body}"
+    if reply_to:
+        message += f"\nHaluan vastauksen osoitteeseen: {reply_to}"
 
     context = ssl.create_default_context()
     server = app.config["MAIL_SERVER"]
