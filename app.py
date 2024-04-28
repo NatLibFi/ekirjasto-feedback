@@ -72,7 +72,11 @@ class FeedbackForm(FlaskForm):
     municipality = SelectField(
         _("My home municipality that receives this feedback"),
         choices=indexed_municipalities(),
-        render_kw={"id": "select-beast"},
+        render_kw={
+            "class": "form-select",
+            "data-control": "select2",
+            "data-dropdown-parent": "body"
+            },
     )
     email = EmailField(
         _("Email address, if you want an answer to your feedback (Optional)"),

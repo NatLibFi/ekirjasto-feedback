@@ -43,7 +43,7 @@ def get_emails():
 
     # Decorate the emails with some custom values that aren't municipalities
     emails.insert(
-        0, (app.config["DEFAULT_RECEIVER"], _("My home municipality is missing"))
+        0, (app.config["DEFAULT_RECEIVER"], _("My home municipality is missing from this list"))
     )
     emails.insert(0, (app.config["DEFAULT_RECEIVER"], _("I don't want to say")))
 
