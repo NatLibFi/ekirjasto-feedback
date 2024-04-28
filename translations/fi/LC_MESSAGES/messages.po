@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-04-16 18:31+0300\n"
+"POT-Creation-Date: 2024-04-28 19:55+0300\n"
 "PO-Revision-Date: 2024-04-16 16:30+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fi\n"
@@ -18,67 +18,72 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.14.0\n"
 
-#: app.py:51
+#: app.py:62
 msgid "Subject"
 msgstr "Aihe"
 
-#: app.py:53
+#: app.py:64
 msgid "General feedback"
 msgstr "Yleinen palaute"
 
-#: app.py:54
+#: app.py:65
 msgid "Material procurement"
 msgstr "Aineiston hankintaehdotus"
 
-#: app.py:55
+#: app.py:66
 msgid "Material error"
 msgstr "Aineiston vikailmoitus"
 
-#: app.py:56
+#: app.py:67
 msgid "Technical problem"
 msgstr "Tekninen ongelma"
 
-#: app.py:57
+#: app.py:68
 msgid "Other"
 msgstr "Muu"
 
-#: app.py:61
+#: app.py:72
 msgid "Message"
 msgstr "Viesti"
 
-#: app.py:64
+#: app.py:75
 msgid "My home municipality that receives this feedback"
 msgstr "Kotikuntani, jolle palaute osoitetaan"
 
-#: app.py:68
+#: app.py:84
 msgid "Email address, if you want an answer to your feedback (Optional)"
 msgstr "Sähköpostiosoite, johon haluat vastauksen palautteellesi (Valinnainen)"
 
-#: app.py:70
+#: app.py:88
 msgid "Send"
 msgstr "Lähetä"
 
-#: app.py:93
+#: app.py:126
 msgid "English"
 msgstr "English "
 
-#: app.py:94
+#: app.py:127
 msgid "Finnish"
 msgstr "Suomi "
 
-#: app.py:95
+#: app.py:128
 msgid "Swedish"
 msgstr "Svenska "
 
-#: app.py:119
+#: app.py:188
 msgid "Thank you for your feedback!"
 msgstr "Kiitos palautteesta!"
 
-#: municipalities.py:44
-msgid "My home municipality is missing"
-msgstr "Kotikuntani puuttuu"
+#: app.py:194
+msgid "There was a problem sending your message."
+msgstr "Viestin lähetyksessä tapahtui virhe."
 
-#: municipalities.py:45
+#: municipalities.py:53
+#, fuzzy
+msgid "My home municipality is missing from this list"
+msgstr "Kotikuntani puuttuu tästä listasta"
+
+#: municipalities.py:56
 msgid "I don't want to say"
 msgstr "En halua kertoa"
 
