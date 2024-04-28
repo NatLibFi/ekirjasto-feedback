@@ -1,4 +1,5 @@
 import secrets
+import re
 import sys
 import smtplib
 import ssl
@@ -29,6 +30,7 @@ from municipalities import indexed_municipalities, index_to_email, index_to_name
 
 from flask import Flask
 
+from email.message import EmailMessage
 import nh3
 
 app = Flask(__name__)
@@ -75,8 +77,8 @@ class FeedbackForm(FlaskForm):
         render_kw={
             "class": "form-select",
             "data-control": "select2",
-            "data-dropdown-parent": "body"
-            },
+            "data-dropdown-parent": "body",
+        },
     )
     email = EmailField(
         _("Email address, if you want an answer to your feedback (Optional)"),
@@ -90,20 +92,29 @@ class FeedbackForm(FlaskForm):
 @app.route(root_path, methods=["GET", "POST"])
 def feedback(name=None):
     form = FeedbackForm()
+
     if request.method == "POST" and form.validate():
-        subject = index_to_name(int(form.municipality.data)) + ": " + form.subject.data
+        subject = form.subject.data
+        municipality_id = int(form.municipality.data)
+        municipality_name = index_to_name(municipality_id)
+        municipality_email = index_to_email(municipality_id)
+
         body = nh3.clean(form.message.data)
+        reply_to = nh3.clean(form.email.data)
+
+        subject = f"E-Kirjasto palaute - {municipality_name}: {subject}"
         recipients = [
-            index_to_email(int(form.municipality.data)),
+            municipality_email,
             app.config["ALWAYS_RECIPIENT"],
         ]
-        reply_to = nh3.clean(form.email.data)
+
         sent = send_email(
             subject,
             body,
             recipients,
             reply_to,
         )
+
         if sent:
             return redirect(url_for("success"))
         else:
@@ -137,10 +148,15 @@ def send_email(subject, body, recipients, reply_to):
 
     # Prevents duplicates
     recipients = list(set(recipients))
+    message = EmailMessage()
 
-    message = f"Subject: E-Kirjasto palaute: {subject}\n\n{body}"
     if reply_to:
-        message += f"\nHaluan vastauksen osoitteeseen: {reply_to}"
+        body += f"\n\nHaluan vastauksen osoitteeseen: {reply_to}"
+
+    message.set_content(body)
+    message["To"] = ",".join(recipients)
+    message["From"] = app.config["MAIL_SENDER"]
+    message["Subject"] = f"E-Kirjasto palaute: {subject}"
 
     context = ssl.create_default_context()
     server = app.config["MAIL_SERVER"]
@@ -152,11 +168,9 @@ def send_email(subject, body, recipients, reply_to):
     try:
         with smtplib.SMTP_SSL(server, port, context=context) as server:
             server.login(username, password)
-            server.sendmail(sender_email, recipients, message)
+            server.sendmail(sender_email, recipients, message.as_string())
     except Exception as exception:
-        save_message(
-                f"exception: {exception}\nTO: {recipients}\n{subject}\n{body}\n\n"
-        )
+        save_message(f"exception: {exception}\nTO: {recipients}\n{subject}\n{body}\n\n")
         return False
     return True
 
@@ -178,4 +192,4 @@ def success(name="success"):
 def error(name="error"):
     return render_template(
         "error.html", error=_("There was a problem sending your message.")
-    )
+    ), 400
