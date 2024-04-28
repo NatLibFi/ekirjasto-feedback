@@ -29,14 +29,18 @@ def index_to_name(index):
 
 
 def get_emails():
-    with open(app.config["EMAILS_CSV"], newline="") as csvfile:
+    # TODO there is a bug where if the file isn't encoded in utf-8 it produces an error in the backup file like this:
+    # exception: 'ascii' codec can't encode character '\xe4' in position 23: ordinal not in range(128)
+    with open(app.config["EMAILS_CSV"], encoding='utf-8', newline="") as csvfile:
         email_reader = csv.reader(
             csvfile,
             delimiter=",",
         )
         emails = []
         for row in email_reader:
-            emails.append((row[0], row[1]))
+            email = row[0]
+            name = row[1]
+            emails.append((email, name))
 
     # Sort by the second element in a list of tuples because that's where the municipality names are
     emails = sorted(emails, key=lambda x: x[1])
