@@ -158,7 +158,7 @@ def send_email(subject, body, recipients, reply_to):
     message.set_content(body)
     message["To"] = ",".join(recipients)
     message["From"] = app.config["MAIL_SENDER"]
-    message["Subject"] = f"E-Kirjasto palaute: {subject}"
+    message["Subject"] = subject
 
     context = ssl.create_default_context()
     server = app.config["MAIL_SERVER"]
