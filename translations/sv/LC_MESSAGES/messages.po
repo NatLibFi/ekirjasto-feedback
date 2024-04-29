@@ -80,7 +80,7 @@ msgstr "Det uppstod ett problem med att skicka ditt meddelande."
 
 #: municipalities.py:51
 msgid "My home municipality is missing from this list"
-msgstr "Min hemkommun fatts från denna meny"
+msgstr "Min hemkommun fattas från denna meny"
 
 #: municipalities.py:54
 msgid "I don't want to say"
