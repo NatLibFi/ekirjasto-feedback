@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-04-28 19:55+0300\n"
+"POT-Creation-Date: 2024-04-29 11:56+0300\n"
 "PO-Revision-Date: 2024-04-16 16:43+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: sv\n"
@@ -18,72 +18,71 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.14.0\n"
 
-#: app.py:62
+#: app.py:64
 msgid "Subject"
 msgstr "Ämne"
 
-#: app.py:64
+#: app.py:66
 msgid "General feedback"
 msgstr "Allmän respons"
 
-#: app.py:65
+#: app.py:67
 msgid "Material procurement"
 msgstr "Anskaffning av nytt material"
 
-#: app.py:66
+#: app.py:68
 msgid "Material error"
 msgstr "Fel i materialet"
 
-#: app.py:67
+#: app.py:69
 msgid "Technical problem"
 msgstr "Tekniskt problem"
 
-#: app.py:68
+#: app.py:70
 msgid "Other"
 msgstr "Annat"
 
-#: app.py:72
+#: app.py:74
 msgid "Message"
 msgstr "Meddelande"
 
-#: app.py:75
+#: app.py:77
 msgid "My home municipality that receives this feedback"
 msgstr "Min hemkommun som hanterar denna respons"
 
-#: app.py:84
+#: app.py:86
 msgid "Email address, if you want an answer to your feedback (Optional)"
 msgstr "Epostaddress, om du vill ha svar på din respons (Valfritt)"
 
-#: app.py:88
+#: app.py:90
 msgid "Send"
 msgstr "Skicka"
 
-#: app.py:126
+#: app.py:128
 msgid "English"
 msgstr "English "
 
-#: app.py:127
+#: app.py:129
 msgid "Finnish"
 msgstr "Suomi "
 
-#: app.py:128
+#: app.py:130
 msgid "Swedish"
 msgstr "Svenska "
 
-#: app.py:188
+#: app.py:193
 msgid "Thank you for your feedback!"
 msgstr "Tack för din respons!"
 
-#: app.py:194
+#: app.py:199
 msgid "There was a problem sending your message."
-msgstr ""
+msgstr "Det uppstod ett problem med att skicka ditt meddelande."
 
-#: municipalities.py:53
-#, fuzzy
+#: municipalities.py:51
 msgid "My home municipality is missing from this list"
 msgstr "Min hemkommun fatts från denna meny"
 
-#: municipalities.py:56
+#: municipalities.py:54
 msgid "I don't want to say"
 msgstr "Jag vill inte uppge"
 
