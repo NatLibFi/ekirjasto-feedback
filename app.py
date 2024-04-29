@@ -46,7 +46,7 @@ from config import app
 
 
 def get_locale():
-    return request.args.get("lang")
+    return request.args.get("lang") or "fi"
 
 
 babel = Babel(app, locale_selector=get_locale)
