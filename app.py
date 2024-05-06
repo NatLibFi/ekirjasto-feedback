@@ -160,7 +160,7 @@ def send_email(subject, body, recipients, reply_to):
     message["From"] = app.config["MAIL_SENDER"]
     message["Subject"] = subject
 
-    context = ssl.create_default_context()
+    context = ssl.SSLContext(ssl.PROTOCOL_TLS)
     server = app.config["MAIL_SERVER"]
     port = app.config["MAIL_PORT"]
     sender_email = app.config["MAIL_SENDER"]
@@ -168,7 +168,8 @@ def send_email(subject, body, recipients, reply_to):
     password = app.config["MAIL_PASSWORD"]
 
     try:
-        with smtplib.SMTP_SSL(server, port, context=context) as server:
+        with smtplib.SMTP(server, port) as server:
+            server.starttls(context=context)
             server.login(username, password)
             server.sendmail(sender_email, recipients, message.as_string())
     except Exception as exception:
