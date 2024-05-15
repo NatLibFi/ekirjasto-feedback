@@ -1,6 +1,9 @@
 {% extends "header.html" %}
 
 {% block content %}
+<div class="alert alert-light" role="alert">
+  Voit jättää palautetta E-kirjastosta tai ehdottaa hankittavia aineistoja. Aineistoehdotuksiin ei vastata 
+</div>
 <p>{{ message|safe }}</p>
 {{ render_form(form) }}
 {% endblock %}
