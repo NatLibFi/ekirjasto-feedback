@@ -134,14 +134,16 @@ def feedback(name=None):
         "sv": _("Swedish"),
     }
 
-    form.device_model.data = request.args.get('device_model')
-    form.software_version.data = request.args.get('software_version')
+    form.device_model.data = request.args.get("device_model")
+    form.software_version.data = request.args.get("software_version")
+    info_text = _("You can leave feedback about the E-library or suggest materials for acquisition. Suggestions for materials will not be responded to.")
 
     return render_template(
         "feedback.html",
         form=form,
         languages=languages,
         selected_language=get_locale(),
+        info_text=info_text,
     )
 
 
