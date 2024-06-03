@@ -44,13 +44,14 @@ def get_emails():
     emails = sorted(emails, key=lambda x: x[1])
 
     # Decorate the emails with some custom values that aren't municipalities
-    emails.append(
+    emails.insert(
+        0,
         (
             app.config["DEFAULT_RECEIVER"],
             _("My home municipality is missing from this list"),
-        )
+        ),
     )
-    emails.append((app.config["DEFAULT_RECEIVER"], _("I don't want to say")))
+    emails.insert(0, (app.config["DEFAULT_RECEIVER"], _("I don't want to say")))
 
     return emails
 

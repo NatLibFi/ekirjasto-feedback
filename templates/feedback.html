@@ -1,6 +1,25 @@
 {% extends "header.html" %}
 
 {% block content %}
+
+<div class="btn-group justify-content-center" role="group">
+    {% for language in languages %}
+        <button
+            onclick='window.location.href="?lang={{ language }}";'
+            target="_self" role="button"
+            class="btn
+            {% if language == selected_language %} btn-primary {% else %} btn-secondary {% endif %}
+            "
+            href="/?lang={{ language }}"
+        >
+            {{ languages[language] }}
+        </button>
+    {% endfor %}
+</div>
+
+<div class="alert alert-light" role="alert">
+    {{ info_text }}
+</div>
 <p>{{ message|safe }}</p>
 {{ render_form(form) }}
 {% endblock %}

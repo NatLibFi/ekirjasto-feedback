@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-04-29 11:56+0300\n"
+"POT-Creation-Date: 2024-05-22 14:16+0300\n"
 "PO-Revision-Date: 2024-04-16 17:50+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -18,63 +18,81 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.14.0\n"
 
-#: app.py:64
+#: app.py:57
 msgid "Subject"
 msgstr ""
 
-#: app.py:66
+#: app.py:59
 msgid "General feedback"
 msgstr ""
 
-#: app.py:67
+#: app.py:60
 msgid "Material procurement"
 msgstr ""
 
-#: app.py:68
+#: app.py:61
 msgid "Material error"
 msgstr ""
 
-#: app.py:69
+#: app.py:62
 msgid "Technical problem"
 msgstr ""
 
-#: app.py:70
+#: app.py:63
 msgid "Other"
 msgstr ""
 
-#: app.py:74
+#: app.py:66
+msgid "Device model"
+msgstr ""
+
+#: app.py:67
+msgid "Software version"
+msgstr ""
+
+#: app.py:69
+msgid "Book name"
+msgstr ""
+
+#: app.py:72
 msgid "Message"
 msgstr ""
 
-#: app.py:77
+#: app.py:76
 msgid "My home municipality that receives this feedback"
 msgstr ""
 
-#: app.py:86
+#: app.py:85
 msgid "Email address, if you want an answer to your feedback (Optional)"
 msgstr ""
 
-#: app.py:90
+#: app.py:89
 msgid "Send"
 msgstr ""
 
-#: app.py:128
+#: app.py:132
 msgid "English"
 msgstr ""
 
-#: app.py:129
+#: app.py:133
 msgid "Finnish"
 msgstr "Suomi"
 
-#: app.py:130
+#: app.py:134
 msgid "Swedish"
 msgstr "Svenska"
 
-#: app.py:193
+#: app.py:139
+msgid ""
+"You can leave feedback about the E-library or suggest materials for "
+"acquisition. Suggestions for materials will not be responded to."
+msgstr ""
+
+#: app.py:192
 msgid "Thank you for your feedback!"
 msgstr ""
 
-#: app.py:199
+#: app.py:198
 msgid "There was a problem sending your message."
 msgstr ""
 
@@ -85,7 +103,4 @@ msgstr ""
 #: municipalities.py:54
 msgid "I don't want to say"
 msgstr ""
-
-#~ msgid "My home municipality is missing"
-#~ msgstr ""
 

@@ -11,27 +11,9 @@
 
     {{ bootstrap.load_js() }}
 
-    <div class="container-fluid">
-        <div class="h-100 d-flex justify-content-center align-items-center">
-            <div>
-
-                <div class="btn-group justify-content-center" role="group">
-                {% for language in languages %}
-                    <button
-                        onclick='window.location.href="?lang={{ language }}";'
-                        target="_self" role="button"
-                        class="btn
-                        {% if language == selected_language %} btn-primary {% else %} btn-secondary {% endif %}
-                        "
-                        href="/?lang={{ language }}"
-                    >
-                        {{ languages[language] }}
-                    </button>
-                {% endfor %}
-                </div>
-
-                {% block content %}{% endblock %}
-            </div>
+    <div class="container-fluid ">
+        <div class="mt-4">
+            {% block content %}{% endblock %}
         </div>
     </div>
 

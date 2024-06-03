@@ -1,22 +1,18 @@
 import secrets
-import re
-import sys
 import smtplib
 import ssl
 import os
 
 from datetime import datetime
 
-from flask import Flask
-from flask import render_template
-from flask import request
+from flask import Flask, render_template, request, render_template, redirect, url_for
 
-from flask import Flask, render_template, redirect, url_for
 from flask_bootstrap import Bootstrap5
 
 from flask_wtf import FlaskForm, CSRFProtect
 from wtforms import (
     StringField,
+    HiddenField,
     TextAreaField,
     EmailField,
     SelectField,
@@ -30,8 +26,6 @@ from flask_babel import Babel
 
 from municipalities import indexed_municipalities, index_to_email, index_to_name
 
-from flask import Flask
-
 from email.message import EmailMessage
 import nh3
 
@@ -41,7 +35,6 @@ app = Flask(__name__)
 # If not set, it defaults to /
 root_path = os.environ.get("ROOT_PATH", "/")
 
-bootstrap = Bootstrap5(app)
 from config import app
 
 
@@ -70,8 +63,17 @@ class FeedbackForm(FlaskForm):
             (_("Other")),
         ],
     )
+    device_manufacturer = HiddenField(_("Manufacturer"), [validators.Optional()])
+    device_model = HiddenField(_("Device model"), [validators.Optional()])
+    version_name = HiddenField(_("Software version name"), [validators.Optional()])
+    version_code = HiddenField(_("Software version code"), [validators.Optional()])
+    commit = HiddenField(_("Commit"), [validators.Optional()])
+    book_name = StringField(
+        _("Book name"), [validators.Optional(), validators.Length(1, 128)]
+    )
     message = TextAreaField(
-        _("Message"), [validators.DataRequired(), validators.Length(1, 2048)]
+        _("Message"),
+        [validators.DataRequired(), validators.Length(1, 2048)],
     )
     municipality = SelectField(
         _("My home municipality that receives this feedback"),
@@ -101,21 +103,29 @@ def feedback(name=None):
         municipality_name = index_to_name(municipality_id)
         municipality_email = index_to_email(municipality_id)
 
-        body = nh3.clean(form.message.data)
-        reply_to = nh3.clean(form.email.data)
-
         subject = f"E-Kirjasto palaute - {municipality_name}: {subject}"
         recipients = [
             municipality_email,
             app.config["ALWAYS_RECIPIENT"],
         ]
 
-        sent = send_email(
-            subject,
-            body,
-            recipients,
-            reply_to,
-        )
+        body = nh3.clean(form.message.data)
+        reply_to = nh3.clean(form.email.data)
+        book_name = nh3.clean(form.book_name.data)
+        device_model = nh3.clean(form.device_model.data)
+        device_manufacturer = nh3.clean(form.device_manufacturer.data)
+        version_name = nh3.clean(form.version_name.data)
+        version_code = nh3.clean(form.version_code.data)
+        commit = nh3.clean(form.commit.data)
+        user_agent = request.headers.get("User-Agent")
+
+        body += f"\n\nHaluan vastauksen osoitteeseen: {reply_to}"
+        body += f"\n\nKirjan nimi: {book_name}"
+        body += f"\n\nLaitteen malli ja valmistaja: {device_manufacturer} {device_model}"
+        body += f"\n\nOhjelmistoversio: {version_name} ({version_code}) (commit: {commit})"
+        body += f"\n\nUser agent: {user_agent}"
+
+        sent = send_email(subject, body, recipients)
 
         if sent:
             return redirect(url_for("success"))
@@ -130,30 +140,27 @@ def feedback(name=None):
         "sv": _("Swedish"),
     }
 
+    form.device_manufacturer.data = request.args.get("device_manufacturer")
+    form.device_model.data = request.args.get("device_model")
+    form.version_name.data = request.args.get("version_name")
+    form.version_code.data = request.args.get("version_code")
+    form.commit.data = request.args.get("commit")
+
+    info_text = _("You can leave feedback about the E-library or suggest materials for acquisition. Suggestions for materials will not be responded to.")
+
     return render_template(
         "feedback.html",
-        form=FeedbackForm(),
+        form=form,
         languages=languages,
         selected_language=get_locale(),
+        info_text=info_text,
     )
 
 
-def send_email(subject, body, recipients, reply_to):
-    if type(subject) is not str:
-        raise ValueError("subject must be a string")
-
-    if type(body) is not str:
-        raise ValueError("body must be a string")
-
-    if type(recipients) is not list:
-        raise ValueError("recipients must be a list")
-
+def send_email(subject, body, recipients):
     # Prevents duplicates
     recipients = list(set(recipients))
     message = EmailMessage()
-
-    if reply_to:
-        body += f"\n\nHaluan vastauksen osoitteeseen: {reply_to}"
 
     message.set_content(body)
     message["To"] = ",".join(recipients)
@@ -164,14 +171,11 @@ def send_email(subject, body, recipients, reply_to):
     server = app.config["MAIL_SERVER"]
     port = app.config["MAIL_PORT"]
     sender_email = app.config["MAIL_SENDER"]
-    username = app.config["MAIL_USERNAME"]
-    password = app.config["MAIL_PASSWORD"]
 
     try:
         with smtplib.SMTP(server, port) as server:
-            server.starttls(context=context)
-            server.login(username, password)
             server.sendmail(sender_email, recipients, message.as_string())
+            server.close()
     except Exception as exception:
         time = datetime.now()
         save_message(
@@ -185,8 +189,12 @@ def save_message(message):
     """
     If sending the email fails for any reason, this is used to save the message to disk as a backup
     """
-    f = open(app.config["BACKUP_FILE"], "a", encoding="utf-8")
-    f.write(message)
+    try:
+        f = open(app.config["BACKUP_FILE"], "a", encoding="utf-8")
+        f.write(message)
+    except Exception as exception:
+        return False
+    return True
 
 
 @app.route(root_path + "/success")
