@@ -125,7 +125,7 @@ def feedback(name=None):
         body += f"\n\nOhjelmistoversio: {version_name} ({version_code}) (commit: {commit})"
         body += f"\n\nUser agent: {user_agent}"
 
-        sent = send_email(subject, body, recipients)
+        sent = send_email(subject, body, reply_to, recipients)
 
         if sent:
             return redirect(url_for("success"))
@@ -157,7 +157,7 @@ def feedback(name=None):
     )
 
 
-def send_email(subject, body, recipients):
+def send_email(subject, body, reply_to, recipients):
     # Prevents duplicates
     recipients = list(set(recipients))
     message = EmailMessage()
@@ -166,6 +166,9 @@ def send_email(subject, body, recipients):
     message["To"] = ",".join(recipients)
     message["From"] = app.config["MAIL_SENDER"]
     message["Subject"] = subject
+    # Setting the Reply-To header here so that replying to emails is more convenient
+    if reply_to:
+        message["Reply-To"] = reply_to
 
     context = ssl.SSLContext(ssl.PROTOCOL_TLS)
     server = app.config["MAIL_SERVER"]
