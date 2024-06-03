@@ -157,7 +157,20 @@ def feedback(name=None):
     )
 
 
+
 def send_email(subject, body, reply_to, recipients):
+    '''Function that sends emails to recipients.
+
+    Args:
+        subject (str): the subject field of the email message to be sent
+        body (str): the text body of the email being sent
+        reply_to (str): The Reply-To header value
+        recipients (list): List of recipients
+
+    Returns:
+        bool: Return value is True if message was sent or False if not
+    '''
+
     # Prevents duplicates
     recipients = list(set(recipients))
     message = EmailMessage()
