@@ -157,7 +157,8 @@ def send_email(subject, body, recipients, reply_to):
 
     message.set_content(body)
     message["To"] = ",".join(recipients)
-    message["From"] = app.config["MAIL_SENDER"]
+    message["From"] = app.config["MAIL_FROM"]
+    message["Sender"] = app.config["MAIL_SENDER"]
     message["Subject"] = subject
 
     context = ssl.SSLContext(ssl.PROTOCOL_TLS)
