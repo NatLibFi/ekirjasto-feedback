@@ -63,8 +63,11 @@ class FeedbackForm(FlaskForm):
             (_("Other")),
         ],
     )
+    device_manufacturer = HiddenField(_("Manufacturer"), [validators.Optional()])
     device_model = HiddenField(_("Device model"), [validators.Optional()])
-    software_version = HiddenField(_("Software version"), [validators.Optional()])
+    version_name = HiddenField(_("Software version name"), [validators.Optional()])
+    version_code = HiddenField(_("Software version code"), [validators.Optional()])
+    commit = HiddenField(_("Commit"), [validators.Optional()])
     book_name = StringField(
         _("Book name"), [validators.Optional(), validators.Length(1, 128)]
     )
@@ -110,13 +113,16 @@ def feedback(name=None):
         reply_to = nh3.clean(form.email.data)
         book_name = nh3.clean(form.book_name.data)
         device_model = nh3.clean(form.device_model.data)
-        software_version = nh3.clean(form.software_version.data)
+        device_manufacturer = nh3.clean(form.device_manufacturer.data)
+        version_name = nh3.clean(form.version_name.data)
+        version_code = nh3.clean(form.version_code.data)
+        commit = nh3.clean(form.commit.data)
         user_agent = request.headers.get("User-Agent")
 
         body += f"\n\nHaluan vastauksen osoitteeseen: {reply_to}"
         body += f"\n\nKirjan nimi: {book_name}"
-        body += f"\n\nLaitteen malli: {device_model}"
-        body += f"\n\nOhjelmistoversio: {software_version}"
+        body += f"\n\nLaitteen malli ja valmistaja: {device_manufacturer} {device_model}"
+        body += f"\n\nOhjelmistoversio: {version_name} ({version_code}) (commit: {commit})"
         body += f"\n\nUser agent: {user_agent}"
 
         sent = send_email(subject, body, recipients)
@@ -134,8 +140,12 @@ def feedback(name=None):
         "sv": _("Swedish"),
     }
 
+    form.device_manufacturer.data = request.args.get("device_manufacturer")
     form.device_model.data = request.args.get("device_model")
-    form.software_version.data = request.args.get("software_version")
+    form.version_name.data = request.args.get("version_name")
+    form.version_code.data = request.args.get("version_code")
+    form.commit.data = request.args.get("commit")
+
     info_text = _("You can leave feedback about the E-library or suggest materials for acquisition. Suggestions for materials will not be responded to.")
 
     return render_template(
