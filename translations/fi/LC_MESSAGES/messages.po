@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-05-22 14:16+0300\n"
+"POT-Creation-Date: 2024-06-04 16:08+0300\n"
 "PO-Revision-Date: 2024-04-16 16:30+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fi\n"
@@ -43,46 +43,58 @@ msgid "Other"
 msgstr "Muu"
 
 #: app.py:66
-msgid "Device model"
+msgid "Manufacturer"
 msgstr ""
 
 #: app.py:67
-msgid "Software version"
+msgid "Device model"
+msgstr ""
+
+#: app.py:68
+msgid "Software version name"
 msgstr ""
 
 #: app.py:69
+msgid "Software version code"
+msgstr ""
+
+#: app.py:70
+msgid "Commit"
+msgstr ""
+
+#: app.py:72
 msgid "Book name"
 msgstr "Kirjan nimi"
 
-#: app.py:72
+#: app.py:75
 msgid "Message"
 msgstr "Viesti"
 
-#: app.py:76
+#: app.py:79
 msgid "My home municipality that receives this feedback"
 msgstr "Kotikuntani, jolle palaute osoitetaan"
 
-#: app.py:85
+#: app.py:88
 msgid "Email address, if you want an answer to your feedback (Optional)"
 msgstr "Sähköpostiosoite, johon haluat vastauksen palautteellesi (Valinnainen)"
 
-#: app.py:89
+#: app.py:92
 msgid "Send"
 msgstr "Lähetä"
 
-#: app.py:132
+#: app.py:138
 msgid "English"
 msgstr "English "
 
-#: app.py:133
+#: app.py:139
 msgid "Finnish"
 msgstr "Suomi "
 
-#: app.py:134
+#: app.py:140
 msgid "Swedish"
 msgstr "Svenska "
 
-#: app.py:139
+#: app.py:149
 msgid ""
 "You can leave feedback about the E-library or suggest materials for "
 "acquisition. Suggestions for materials will not be responded to."
@@ -90,11 +102,11 @@ msgstr ""
 "Voit jättää palautetta E-kirjastosta tai ehdottaa hankittavia aineistoja."
 " Aineistoehdotuksiin ei vastata."
 
-#: app.py:192
+#: app.py:219
 msgid "Thank you for your feedback!"
 msgstr "Kiitos palautteesta!"
 
-#: app.py:198
+#: app.py:225
 msgid "There was a problem sending your message."
 msgstr "Viestin lähetyksessä tapahtui virhe."
 
@@ -105,4 +117,7 @@ msgstr "Kotikuntani puuttuu tästä listasta"
 #: municipalities.py:54
 msgid "I don't want to say"
 msgstr "En halua kertoa"
+
+#~ msgid "Software version"
+#~ msgstr ""
 
