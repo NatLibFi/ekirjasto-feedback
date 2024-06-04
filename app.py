@@ -177,7 +177,8 @@ def send_email(subject, body, reply_to, recipients):
 
     message.set_content(body)
     message["To"] = ",".join(recipients)
-    message["From"] = app.config["MAIL_SENDER"]
+    message["From"] = app.config["MAIL_FROM"]
+    message["Sender"] = app.config["MAIL_SENDER"]
     message["Subject"] = subject
     # Setting the Reply-To header here so that replying to emails is more convenient
     if reply_to:
