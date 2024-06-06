@@ -121,8 +121,12 @@ def feedback(name=None):
 
         body += f"\n\nHaluan vastauksen osoitteeseen: {reply_to}"
         body += f"\n\nKirjan nimi: {book_name}"
-        body += f"\n\nLaitteen malli ja valmistaja: {device_manufacturer} {device_model}"
-        body += f"\n\nOhjelmistoversio: {version_name} ({version_code}) (commit: {commit})"
+        body += (
+            f"\n\nLaitteen malli ja valmistaja: {device_manufacturer} {device_model}"
+        )
+        body += (
+            f"\n\nOhjelmistoversio: {version_name} ({version_code}) (commit: {commit})"
+        )
         body += f"\n\nUser agent: {user_agent}"
 
         sent = send_email(subject, body, reply_to, recipients)
@@ -146,7 +150,9 @@ def feedback(name=None):
     form.version_code.data = request.args.get("version_code")
     form.commit.data = request.args.get("commit")
 
-    info_text = _("You can leave feedback about the E-library or suggest materials for acquisition. Suggestions for materials will not be responded to.")
+    info_text = _(
+        "You can leave feedback about the E-library or suggest materials for acquisition. Suggestions for materials will not be responded to."
+    )
 
     return render_template(
         "feedback.html",
@@ -157,9 +163,8 @@ def feedback(name=None):
     )
 
 
-
 def send_email(subject, body, reply_to, recipients):
-    '''Function that sends emails to recipients.
+    """Function that sends emails to recipients.
 
     Args:
         subject (str): the subject field of the email message to be sent
@@ -169,7 +174,7 @@ def send_email(subject, body, reply_to, recipients):
 
     Returns:
         bool: Return value is True if message was sent or False if not
-    '''
+    """
 
     # Prevents duplicates
     recipients = list(set(recipients))
