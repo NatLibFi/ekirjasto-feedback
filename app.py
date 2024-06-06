@@ -1,11 +1,12 @@
+from config import app
+
 import secrets
 import smtplib
-import ssl
 import os
 
 from datetime import datetime
 
-from flask import Flask, render_template, request, render_template, redirect, url_for
+from flask import request, render_template, redirect, url_for
 
 from flask_bootstrap import Bootstrap5
 
@@ -20,7 +21,6 @@ from wtforms import (
     validators,
 )
 
-from wtforms.validators import DataRequired, Length
 from flask_babel import lazy_gettext as _
 from flask_babel import Babel
 
@@ -29,13 +29,9 @@ from municipalities import indexed_municipalities, index_to_email, index_to_name
 from email.message import EmailMessage
 import nh3
 
-app = Flask(__name__)
-
 # root path of the application can be set with the ROOT_PATH environment variable
 # If not set, it defaults to /
 root_path = os.environ.get("ROOT_PATH", "/")
-
-from config import app
 
 
 def get_locale():
@@ -189,7 +185,6 @@ def send_email(subject, body, reply_to, recipients):
     if reply_to:
         message["Reply-To"] = reply_to
 
-    context = ssl.SSLContext(ssl.PROTOCOL_TLS)
     server = app.config["MAIL_SERVER"]
     port = app.config["MAIL_PORT"]
     sender_email = app.config["MAIL_SENDER"]
@@ -215,6 +210,7 @@ def save_message(message):
         f = open(app.config["BACKUP_FILE"], "a", encoding="utf-8")
         f.write(message)
     except Exception as exception:
+        print(exception)
         return False
     return True
 
