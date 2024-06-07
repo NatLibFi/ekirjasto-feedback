@@ -1,11 +1,12 @@
+from config import app
+
 import secrets
 import smtplib
-import ssl
 import os
 
 from datetime import datetime
 
-from flask import Flask, render_template, request, render_template, redirect, url_for
+from flask import request, render_template, redirect, url_for
 
 from flask_bootstrap import Bootstrap5
 
@@ -20,7 +21,6 @@ from wtforms import (
     validators,
 )
 
-from wtforms.validators import DataRequired, Length
 from flask_babel import lazy_gettext as _
 from flask_babel import Babel
 
@@ -29,13 +29,9 @@ from municipalities import indexed_municipalities, index_to_email, index_to_name
 from email.message import EmailMessage
 import nh3
 
-app = Flask(__name__)
-
 # root path of the application can be set with the ROOT_PATH environment variable
 # If not set, it defaults to /
 root_path = os.environ.get("ROOT_PATH", "/")
-
-from config import app
 
 
 def get_locale():
@@ -121,8 +117,12 @@ def feedback(name=None):
 
         body += f"\n\nHaluan vastauksen osoitteeseen: {reply_to}"
         body += f"\n\nKirjan nimi: {book_name}"
-        body += f"\n\nLaitteen malli ja valmistaja: {device_manufacturer} {device_model}"
-        body += f"\n\nOhjelmistoversio: {version_name} ({version_code}) (commit: {commit})"
+        body += (
+            f"\n\nLaitteen malli ja valmistaja: {device_manufacturer} {device_model}"
+        )
+        body += (
+            f"\n\nOhjelmistoversio: {version_name} ({version_code}) (commit: {commit})"
+        )
         body += f"\n\nUser agent: {user_agent}"
 
         sent = send_email(subject, body, reply_to, recipients)
@@ -146,7 +146,9 @@ def feedback(name=None):
     form.version_code.data = request.args.get("version_code")
     form.commit.data = request.args.get("commit")
 
-    info_text = _("You can leave feedback about the E-library or suggest materials for acquisition. Suggestions for materials will not be responded to.")
+    info_text = _(
+        "You can leave feedback about the E-library or suggest materials for acquisition. Suggestions for materials will not be responded to."
+    )
 
     return render_template(
         "feedback.html",
@@ -157,9 +159,8 @@ def feedback(name=None):
     )
 
 
-
 def send_email(subject, body, reply_to, recipients):
-    '''Function that sends emails to recipients.
+    """Function that sends emails to recipients.
 
     Args:
         subject (str): the subject field of the email message to be sent
@@ -169,7 +170,7 @@ def send_email(subject, body, reply_to, recipients):
 
     Returns:
         bool: Return value is True if message was sent or False if not
-    '''
+    """
 
     # Prevents duplicates
     recipients = list(set(recipients))
@@ -184,7 +185,6 @@ def send_email(subject, body, reply_to, recipients):
     if reply_to:
         message["Reply-To"] = reply_to
 
-    context = ssl.SSLContext(ssl.PROTOCOL_TLS)
     server = app.config["MAIL_SERVER"]
     port = app.config["MAIL_PORT"]
     sender_email = app.config["MAIL_SENDER"]
@@ -210,6 +210,7 @@ def save_message(message):
         f = open(app.config["BACKUP_FILE"], "a", encoding="utf-8")
         f.write(message)
     except Exception as exception:
+        print(exception)
         return False
     return True
 
