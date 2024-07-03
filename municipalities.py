@@ -19,11 +19,14 @@ def indexed_municipalities():
         i += 1
     return munis
 
-def index_to_name(index):
-    return municipalities[index][0]
 
 def index_to_email(index):
+    return municipalities[index][0]
+
+
+def index_to_name(index):
     return municipalities[index][1]
+
 
 def get_emails():
     with open(app.config["EMAILS_CSV"], encoding="utf-8", newline="") as csvfile:
@@ -33,13 +36,12 @@ def get_emails():
         )
         emails = []
         for row in email_reader:
-            name = row[0]
-            email = row[1]
+            email = row[0]
+            name = row[1]
             emails.append((email, name))
-    ######
-    # Sorthing happens by another means: EKIR-XXX
-    # Sort by the second element in a list of tuples because that's where the municipality names are 
-    # emails = sorted(emails, key=lambda x: x[1])
+
+    # Sort by the second element in a list of tuples because that's where the municipality names are
+    emails = sorted(emails, key=lambda x: x[1])
 
     # Decorate the emails with some custom values that aren't municipalities
 ##    emails.append(
