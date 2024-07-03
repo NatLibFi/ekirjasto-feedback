@@ -43,7 +43,7 @@ def get_emails():
     ######
     # Sorthing happens by another means: EKIR-270
     # Sort by the second element in a list of tuples because that's where the municipality names are 
-    emails = sorted(emails, key=lambda x: x[1])
+    # emails = sorted(emails, key=lambda x: x[1])
 
     # Decorate the emails with some custom values that aren't municipalities
 ##    emails.append(
