@@ -15,7 +15,7 @@ env:
 jobs:
   build:
     # Build & Release on push to main branch and on release
-    # Build only on pull requests
+    # Build only on push to dev and pull requests to main
     if: github.event_name == 'push' && (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main') || github.event_name == 'pull_request' || github.event_name == 'release'
     runs-on: ubuntu-latest
     permissions:
