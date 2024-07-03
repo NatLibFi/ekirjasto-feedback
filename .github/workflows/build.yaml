@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-    branches: ["dev"]
+    branches: ["*"]
   pull_request:
     branches: ["main"]
   release:
@@ -16,7 +16,7 @@ jobs:
   build:
     # Build & Release on push to main branch and on release
     # Build only on pull requests
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event_name == 'pull_request' || github.event_name == 'release'
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main') || github.event_name == 'pull_request' || github.event_name == 'release'
     runs-on: ubuntu-latest
     permissions:
       contents: read
