@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-06-04 16:08+0300\n"
+"POT-Creation-Date: 2024-08-23 09:07+0300\n"
 "PO-Revision-Date: 2024-04-16 16:30+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fi\n"
@@ -17,6 +17,10 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.14.0\n"
+
+#: app.py:53
+msgid "Please select a valid municipality."
+msgstr "Valinta on pakollinen."
 
 #: app.py:57
 msgid "Subject"
@@ -70,31 +74,35 @@ msgstr "Kirjan nimi"
 msgid "Message"
 msgstr "Viesti"
 
-#: app.py:79
+#: app.py:81
 msgid "My home municipality that receives this feedback"
 msgstr "Kotikuntani, jolle palaute osoitetaan"
 
-#: app.py:88
+#: app.py:82
+msgid "Select a municipality"
+msgstr "Valitse kotikunta"
+
+#: app.py:91
 msgid "Email address, if you want an answer to your feedback (Optional)"
 msgstr "Sähköpostiosoite, johon haluat vastauksen palautteellesi (Valinnainen)"
 
-#: app.py:92
+#: app.py:95
 msgid "Send"
 msgstr "Lähetä"
 
-#: app.py:138
+#: app.py:144
 msgid "English"
 msgstr "English "
 
-#: app.py:139
+#: app.py:145
 msgid "Finnish"
 msgstr "Suomi "
 
-#: app.py:140
+#: app.py:146
 msgid "Swedish"
 msgstr "Svenska "
 
-#: app.py:149
+#: app.py:155
 msgid ""
 "You can leave feedback about the E-library or suggest materials for "
 "acquisition. Suggestions for materials will not be responded to."
@@ -102,22 +110,20 @@ msgstr ""
 "Voit jättää palautetta E-kirjastosta tai ehdottaa hankittavia aineistoja."
 " Aineistoehdotuksiin ei vastata."
 
-#: app.py:219
+#: app.py:226
 msgid "Thank you for your feedback!"
 msgstr "Kiitos palautteesta!"
 
-#: app.py:225
+#: app.py:232
 msgid "There was a problem sending your message."
 msgstr "Viestin lähetyksessä tapahtui virhe."
 
-#: municipalities.py:51
-msgid "My home municipality is missing from this list"
-msgstr "Kotikuntani puuttuu tästä listasta"
-
-#: municipalities.py:54
-msgid "I don't want to say"
-msgstr "En halua kertoa"
-
 #~ msgid "Software version"
 #~ msgstr ""
+
+#~ msgid "My home municipality is missing from this list"
+#~ msgstr "Kotikuntani puuttuu tästä listasta"
+
+#~ msgid "I don't want to say"
+#~ msgstr "En halua kertoa"
 
