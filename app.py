@@ -19,6 +19,7 @@ from wtforms import (
     SelectField,
     SubmitField,
     validators,
+    ValidationError
 )
 
 from flask_babel import lazy_gettext as _
@@ -47,6 +48,9 @@ bootstrap = Bootstrap5(app)
 csrf = CSRFProtect(app)
 app.secret_key = secrets.token_urlsafe(16)
 
+def validate_municipality(form, field):
+    if field.data == "":
+        raise ValidationError(_("Please select a valid municipality."))
 
 class FeedbackForm(FlaskForm):
     subject = SelectField(
@@ -71,14 +75,16 @@ class FeedbackForm(FlaskForm):
         _("Message"),
         [validators.DataRequired(), validators.Length(1, 2048)],
     )
+    
     municipality = SelectField(
         _("My home municipality that receives this feedback"),
-        choices=indexed_municipalities(),
+        choices=[("", _("Select a municipality"))] + indexed_municipalities(),
         render_kw={
             "class": "form-select",
             "data-control": "select2",
             "data-dropdown-parent": "body",
         },
+        validators=[validate_municipality]
     )
     email = EmailField(
         _("Email address, if you want an answer to your feedback (Optional)"),
@@ -87,7 +93,6 @@ class FeedbackForm(FlaskForm):
     submit = SubmitField(
         _("Send"),
     )
-
 
 @app.route(root_path, methods=["GET", "POST"])
 def feedback(name=None):

@@ -10,6 +10,8 @@ If you change the municipalities emails csv file remember to restart the server 
 
 Create a virtual environment with something like 
 `python -m venv venv`
+activate it
+`. ./venv/bin/activate`
 then install dependencies with
 `pip install -r requirements.txt`.
 and run the app with
