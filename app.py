@@ -152,7 +152,7 @@ def feedback(name=None):
     form.commit.data = request.args.get("commit")
 
     info_text = _(
-        "You can leave feedback about the E-library or suggest materials for acquisition. Suggestions for materials will not be responded to."
+        "You can leave feedback about the E-library or suggest materials for acquisition. Suggestions for materials will not be responded to. E-kirjasto is developed with municipalities and your home library will answer your feedback. The development team also reads every feedback."
     )
 
     return render_template(
