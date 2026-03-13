@@ -32,6 +32,7 @@ bootstrap = Bootstrap5(app)
 csrf = CSRFProtect(app)
 app.secret_key = secrets.token_urlsafe(16)
 
+# The main route for the feedback form
 @app.route(root_path, methods=["GET", "POST"])
 def feedback(name=None):
     form = FeedbackForm()
@@ -40,7 +41,7 @@ def feedback(name=None):
     populate_form_for_get(form)
     return render_feedback_page(form)
 
-
+# Success and error routes
 @app.route(root_path + "/success")
 def success(name="success"):
     return render_template("success.html", thanks=_("Thank you for your feedback!"))
@@ -54,7 +55,12 @@ def error(name="error"):
     ), 400
 
 def handle_feedback_post(form):
-    """Handle POST request for feedback form."""
+    """
+    Handle POST request for feedback form.
+    
+    Returns:
+        A redirect to either the success or error page based on the outcome of sending the email.
+    """
     now = datetime.now()
     # Check if user has sent feedback in the last minute to prevent spam.
     last_feedback_time = session.get("last_feedback_time")
@@ -82,7 +88,10 @@ def handle_feedback_post(form):
         return redirect(url_for("error", error=error_msg))
 
 def populate_form_for_get(form):
-    """Populate form fields from GET request args."""
+    """
+    Populate form fields from GET request args.
+
+    """
     form.device_manufacturer.data = request.args.get("device_manufacturer")
     form.device_model.data = request.args.get("device_model")
     form.version_name.data = request.args.get("version_name")
@@ -90,7 +99,11 @@ def populate_form_for_get(form):
     form.commit.data = request.args.get("commit")
 
 def render_feedback_page(form):
-    """Render feedback page for GET request."""
+    """
+    Render feedback page for GET request.
+    
+    Returns:    Rendered feedback page with form and additional info.
+    """
     languages = {
         "en": _("English"),
         "fi": _("Finnish"),
