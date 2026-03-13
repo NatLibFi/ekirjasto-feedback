@@ -1,7 +1,6 @@
 from config import app
 
 import secrets
-import smtplib
 import os
 
 from datetime import datetime
@@ -13,9 +12,10 @@ from flask_wtf import CSRFProtect
 from flask_babel import lazy_gettext as _
 from flask_babel import Babel
 
-from municipalities import indexed_municipalities, index_to_email, index_to_name
+from municipalities import index_to_email, index_to_name
+from utils.email_utils import set_recipients, build_feedback_body, send_email
+from forms.feedback import FeedbackForm
 
-from email.message import EmailMessage
 import nh3
 
 # root path of the application can be set with the ROOT_PATH environment variable
@@ -105,61 +105,6 @@ def feedback(name=None):
         info_text=info_text,
     )
 
-
-def send_email(subject, body, reply_to, recipients):
-    """Function that sends emails to recipients.
-
-    Args:
-        subject (str): the subject field of the email message to be sent
-        body (str): the text body of the email being sent
-        reply_to (str): The Reply-To header value
-        recipients (list): List of recipients
-
-    Returns:
-        bool: Return value is True if message was sent or False if not
-    """
-
-    # Prevents duplicates
-    recipients = list(set(recipients))
-    message = EmailMessage()
-
-    message.set_content(body)
-    message["To"] = ",".join(recipients)
-    message["From"] = app.config["MAIL_FROM"]
-    message["Sender"] = app.config["MAIL_SENDER"]
-    message["Subject"] = subject
-    # Setting the Reply-To header here so that replying to emails is more convenient
-    if reply_to:
-        message["Reply-To"] = reply_to
-
-    server = app.config["MAIL_SERVER"]
-    port = app.config["MAIL_PORT"]
-    sender_email = app.config["MAIL_SENDER"]
-
-    try:
-        with smtplib.SMTP(server, port) as server:
-            server.sendmail(sender_email, recipients, message.as_string())
-            server.close()
-    except Exception as exception:
-        time = datetime.now()
-        save_message(
-            f"exception: {exception}\n{time}\nTO: {recipients}\n{subject}\n{body}\n\n"
-        )
-        return False
-    return True
-
-
-def save_message(message):
-    """
-    If sending the email fails for any reason, this is used to save the message to disk as a backup
-    """
-    try:
-        f = open(app.config["BACKUP_FILE"], "a", encoding="utf-8")
-        f.write(message)
-    except Exception as exception:
-        print(exception)
-        return False
-    return True
 
 
 @app.route(root_path + "/success")
