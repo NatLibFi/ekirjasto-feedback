@@ -8,14 +8,26 @@ If you change the municipalities emails csv file remember to restart the server 
 
 # Development
 
+Runs at least on `Python 3.11`.
+
 Create a virtual environment with something like 
-`python -m venv venv`
-activate it
+`python3.11 -m venv venv`
+and activate it
 `. ./venv/bin/activate`
 then install dependencies with
 `pip install -r requirements.txt`.
+Then create a `emails.csv` a few names and emails
+```sh
+test@testcity.org,Test City
+info@sampletown.org,Sample Town
+```
 and run the app with
 `flask --app app run --debug` when developing.
+
+The app will run in
+`http://127.0.0.1:5000/palaute/`
+
+To view the form in web-patron, change the Footer's Feedback link to point to your local instance above.
 
 # Translations
 
