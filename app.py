@@ -89,11 +89,22 @@ def render_feedback_page(form):
     info_text = _(
         "You can leave feedback about the E-library or suggest materials for acquisition. Suggestions for materials will not be responded to."
     )
+    privacy_policy_urls = {
+        "fi": "https://www.kansalliskirjasto.fi/fi/e-kirjasto/e-kirjaston-tietosuoja-ja-rekisteriseloste",
+        "sv": "https://www.kansalliskirjasto.fi/sv/e-biblioteket/dataskydds-och-registerbeskrivning",
+        "en": "https://www.kansalliskirjasto.fi/en/e-library/privacy-policy-data-protection-statement-and-description-data-file",
+    }
+    locale = get_locale()
+    policy_url = privacy_policy_urls.get(locale, privacy_policy_urls["en"])
+    info_policy = _(
+        "Messages sent through this feedback form will include the device's manufacturer, model, and application version to help locate errors. Our privacy policy can be found here: "
+    ) + f'<a href="{policy_url}" target="_blank">{policy_url}</a>'
 
     return render_template(
         "feedback.html",
         form=form,
         languages=languages,
-        selected_language=get_locale(),
+        selected_language=locale,
         info_text=info_text,
+        info_policy=info_policy,
     )

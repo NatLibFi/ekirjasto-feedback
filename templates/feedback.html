@@ -17,8 +17,12 @@
     {% endfor %}
 </div>
 
-<div class="alert alert-light" role="alert">
+<div class="alert alert-light" role="alert" style="margin-bottom:0; padding-bottom:0;">
     {{ info_text }}
+</div>
+
+<div class="alert alert-light" role="alert">
+    {{ info_policy|safe }}
 </div>
 <p>{{ message|safe }}</p>
 {{ render_form(form) }}
