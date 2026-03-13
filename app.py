@@ -5,8 +5,7 @@ import os
 
 from datetime import datetime
 
-from flask import request, render_template, redirect, url_for
-
+from flask import request, render_template, redirect, url_for, session
 from flask_bootstrap import Bootstrap5
 from flask_wtf import CSRFProtect
 from flask_babel import lazy_gettext as _
@@ -22,13 +21,10 @@ import nh3
 # If not set, it defaults to /
 root_path = os.environ.get("ROOT_PATH", "/")
 
-
 def get_locale():
     return request.args.get("lang") or "fi"
 
-
 babel = Babel(app, locale_selector=get_locale)
-
 
 # Bootstrap-Flask requires this line
 bootstrap = Bootstrap5(app)
@@ -39,60 +35,57 @@ app.secret_key = secrets.token_urlsafe(16)
 @app.route(root_path, methods=["GET", "POST"])
 def feedback(name=None):
     form = FeedbackForm()
-
     if request.method == "POST" and form.validate():
-        subject = form.subject.data
-        municipality_id = int(form.municipality.data)
-        municipality_name = index_to_name(municipality_id)
-        municipality_email = index_to_email(municipality_id)
+        return handle_feedback_post(form)
+    populate_form_for_get(form)
+    return render_feedback_page(form)
 
-        subject = f"E-Kirjasto palaute - {municipality_name}: {subject}"
-        recipients = [
-            municipality_email,
-            app.config["ALWAYS_RECIPIENT"],
-        ]
 
-        body = nh3.clean(form.message.data)
-        reply_to = nh3.clean(form.email.data)
-        book_name = nh3.clean(form.book_name.data)
-        device_model = nh3.clean(form.device_model.data)
-        device_manufacturer = nh3.clean(form.device_manufacturer.data)
-        version_name = nh3.clean(form.version_name.data)
-        version_code = nh3.clean(form.version_code.data)
-        commit = nh3.clean(form.commit.data)
-        user_agent = request.headers.get("User-Agent")
+@app.route(root_path + "/success")
+def success(name="success"):
+    return render_template("success.html", thanks=_("Thank you for your feedback!"))
 
-        body += f"\n\nHaluan vastauksen osoitteeseen: {reply_to}"
-        body += f"\n\nKirjan nimi: {book_name}"
-        body += (
-            f"\n\nLaitteen malli ja valmistaja: {device_manufacturer} {device_model}"
-        )
-        body += (
-            f"\n\nOhjelmistoversio: {version_name} ({version_code}) (commit: {commit})"
-        )
-        body += f"\n\nUser agent: {user_agent}"
+@app.route(root_path + "/error")
+def error(name="error"):
+    # Accept error message as query parameter, fallback to default
+    error_msg = request.args.get("error") or _( "There was a problem sending your message.")
+    return render_template(
+        "error.html", error=error_msg
+    ), 400
 
-        sent = send_email(subject, body, reply_to, recipients)
+def handle_feedback_post(form):
+    """Handle POST request for feedback form."""
+    form_subject = form.subject.data
+    municipality_id = int(form.municipality.data)
+    municipality_name = index_to_name(municipality_id)
+    municipality_email = index_to_email(municipality_id)
+    recipients = set_recipients(form_subject, municipality_email)
+    email_subject = f"E-Kirjasto palaute - {municipality_name}: {form_subject}"
+    user_agent = request.headers.get("User-Agent")
+    body = build_feedback_body(form, user_agent)
 
-        if sent:
-            return redirect(url_for("success"))
-        else:
-            return redirect(url_for("error"))
+    sent = send_email(email_subject, body, nh3.clean(form.email.data), recipients)
+    if sent:
+        return redirect(url_for("success"))
+    else:
+        error_msg = _("There was a problem sending your message.")
+        return redirect(url_for("error", error=error_msg))
 
-    # Getting these from config.py with translation didn't seem to work
-    # Note that these are "translated" into the original language so every language displays "English" so you always find it
-    languages = {
-        "en": _("English"),
-        "fi": _("Finnish"),
-        "sv": _("Swedish"),
-    }
-
+def populate_form_for_get(form):
+    """Populate form fields from GET request args."""
     form.device_manufacturer.data = request.args.get("device_manufacturer")
     form.device_model.data = request.args.get("device_model")
     form.version_name.data = request.args.get("version_name")
     form.version_code.data = request.args.get("version_code")
     form.commit.data = request.args.get("commit")
 
+def render_feedback_page(form):
+    """Render feedback page for GET request."""
+    languages = {
+        "en": _("English"),
+        "fi": _("Finnish"),
+        "sv": _("Swedish"),
+    }
     info_text = _(
         "You can leave feedback about the E-library or suggest materials for acquisition. Suggestions for materials will not be responded to."
     )
@@ -104,16 +97,3 @@ def feedback(name=None):
         selected_language=get_locale(),
         info_text=info_text,
     )
-
-
-
-@app.route(root_path + "/success")
-def success(name="success"):
-    return render_template("success.html", thanks=_("Thank you for your feedback!"))
-
-
-@app.route(root_path + "/error")
-def error(name="error"):
-    return render_template(
-        "error.html", error=_("There was a problem sending your message.")
-    ), 400
