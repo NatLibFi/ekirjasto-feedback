@@ -55,6 +55,16 @@ def error(name="error"):
 
 def handle_feedback_post(form):
     """Handle POST request for feedback form."""
+    now = datetime.now()
+    # Check if user has sent feedback in the last minute to prevent spam.
+    last_feedback_time = session.get("last_feedback_time")
+    if last_feedback_time:
+        last_feedback_dt = datetime.fromisoformat(last_feedback_time)
+        if (now - last_feedback_dt).total_seconds() < 60:
+            error_msg = _("You have already sent feedback within the last minute. Please wait before sending again.")
+            return redirect(url_for("error", error=error_msg))
+
+    session["last_feedback_time"] = now.isoformat()
     form_subject = form.subject.data
     municipality_id = int(form.municipality.data)
     municipality_name = index_to_name(municipality_id)
