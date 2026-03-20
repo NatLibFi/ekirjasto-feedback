@@ -25,6 +25,29 @@
     {{ info_policy|safe }}
 </div>
 <p>{{ message|safe }}</p>
+
+<div>
 {{ render_form(form) }}
+</div>
+
+<script>
+    // Send CSRF token to parent window if the feedback app is embedded in an iframe
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get CSRF token from form
+        var csrfTokenInput = document.querySelector('input[name="csrf_token"]');
+        var csrfToken = csrfTokenInput ? csrfTokenInput.value : 'not found';
+        // Only send postMessage if parent window is not the feedback app itself.
+        if (window.parent !== window && window.location !== window.parent.location) {
+            window.parent.postMessage(
+                {
+                    type: 'feedback-csrf-token',
+                    csrfToken: csrfToken
+                },
+                '{{ parent_origin }}'
+            );
+        }
+    });
+</script>
+
 {% endblock %}
 
