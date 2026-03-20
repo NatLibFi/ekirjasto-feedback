@@ -9,7 +9,7 @@ from flask_babel import lazy_gettext as _
 def set_recipients(subject, municipality_email):
     """Return recipient list based on subject."""
     always_recipient = app.config["ALWAYS_RECIPIENT"]
-    if subject == _("Suggest a new book"):
+    if subject == _("Suggest a new book or magazine"):
         return [always_recipient]
     return [municipality_email, always_recipient]
 

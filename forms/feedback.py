@@ -22,12 +22,13 @@ class FeedbackForm(FlaskForm):
         _("Subject"),
         choices=[
             (_( "General feedback")),
-            (_( "Suggest a new book")),
-            (_( "Report an error in books")),
+            (_( "Suggest a new book or magazine")),
             (_( "Report a technical problem")),
             (_( "Other feedback")),
         ],
-        description=_("Select the subject of your feedback. Please note that if you make a suggestion about the same book from the same device, it will not be registered."),
+        description=_("Select the subject of your feedback. Please note that if you make" \
+        " a suggestion about the same book or magazine from the same device, it will not be" \
+        " handled."),
     )
     device_manufacturer = HiddenField(_("Manufacturer"), [validators.Optional()])
     device_model = HiddenField(_("Device model"), [validators.Optional()])
@@ -51,7 +52,8 @@ class FeedbackForm(FlaskForm):
             "data-dropdown-parent": "body",
         },
         validators=[validators.DataRequired(), validate_municipality],
-        description=_("Your home municipality is needed to direct your feedback to the right library."),
+        description=_("Your home municipality is needed to direct your feedback to the right" \
+        " library."),
     )
     email = EmailField(
         _("Email address, if you want an answer to your feedback (Optional)"),
