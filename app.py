@@ -36,8 +36,10 @@ app.secret_key = secrets.token_urlsafe(16)
 @app.route(root_path, methods=["GET", "POST"])
 def feedback(name=None):
     form = FeedbackForm()
+    ## Handle form submission
     if request.method == "POST" and form.validate():
         return handle_feedback_post(form)
+    # If not POST, render the feedback form page
     populate_form_for_get(form)
     return render_feedback_page(form)
 
@@ -123,6 +125,7 @@ def render_feedback_page(form):
         "Messages sent through this feedback form will include the device's manufacturer, model, and application version to help locate errors. Our privacy policy can be found here: "
     ) + f'<a href="{policy_url}" target="_blank">{policy_url}</a>'
 
+    parent_origin = app.config.get("PARENT_ORIGIN", "*")
     return render_template(
         "feedback.html",
         form=form,
@@ -130,4 +133,5 @@ def render_feedback_page(form):
         selected_language=locale,
         info_text=info_text,
         info_policy=info_policy,
+        parent_origin=parent_origin,
     )
