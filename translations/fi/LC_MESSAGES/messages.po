@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-08-23 09:07+0300\n"
+"POT-Creation-Date: 2026-03-20 15:27+0200\n"
 "PO-Revision-Date: 2024-04-16 16:30+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fi\n"
@@ -18,91 +18,33 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.14.0\n"
 
-#: app.py:53
-msgid "Please select a valid municipality."
-msgstr "Valinta on pakollinen."
+#: app.py:47
+msgid "Thank you for your feedback!"
+msgstr "Kiitos palautteesta!"
 
-#: app.py:57
-msgid "Subject"
-msgstr "Aihe"
-
-#: app.py:59
-msgid "General feedback"
-msgstr "Yleinen palaute"
-
-#: app.py:60
-msgid "Material procurement"
-msgstr "Aineiston hankintaehdotus"
-
-#: app.py:61
-msgid "Material error"
-msgstr "Aineiston vikailmoitus"
-
-#: app.py:62
-msgid "Technical problem"
-msgstr "Tekninen ongelma"
-
-#: app.py:63
-msgid "Other"
-msgstr "Muu"
-
-#: app.py:66
-msgid "Manufacturer"
-msgstr ""
-
-#: app.py:67
-msgid "Device model"
-msgstr ""
-
-#: app.py:68
-msgid "Software version name"
-msgstr ""
-
-#: app.py:69
-msgid "Software version code"
-msgstr ""
+#: app.py:52 app.py:87
+msgid "There was a problem sending your message."
+msgstr "Viestin lähetyksessä tapahtui virhe."
 
 #: app.py:70
-msgid "Commit"
-msgstr ""
+msgid ""
+"You have already sent feedback within the last minute. Please wait before"
+" sending again."
+msgstr "Lähetit palautteen alle minuutti sitten. Voit lähettää seuraavan palautteen hetken päästä."
 
-#: app.py:72
-msgid "Book name"
-msgstr "Kirjan nimi"
-
-#: app.py:75
-msgid "Message"
-msgstr "Viesti"
-
-#: app.py:81
-msgid "My home municipality that receives this feedback"
-msgstr "Kotikuntani, jolle palaute osoitetaan"
-
-#: app.py:82
-msgid "Select a municipality"
-msgstr "Valitse kotikunta"
-
-#: app.py:91
-msgid "Email address, if you want an answer to your feedback (Optional)"
-msgstr "Sähköpostiosoite, johon haluat vastauksen palautteellesi (Valinnainen)"
-
-#: app.py:95
-msgid "Send"
-msgstr "Lähetä"
-
-#: app.py:144
+#: app.py:108
 msgid "English"
 msgstr "English "
 
-#: app.py:145
+#: app.py:109
 msgid "Finnish"
 msgstr "Suomi "
 
-#: app.py:146
+#: app.py:110
 msgid "Swedish"
 msgstr "Svenska "
 
-#: app.py:155
+#: app.py:112
 msgid ""
 "You can leave feedback about the E-library or suggest materials for "
 "acquisition. Suggestions for materials will not be responded to."
@@ -110,20 +52,92 @@ msgstr ""
 "Voit jättää palautetta E-kirjastosta tai ehdottaa hankittavia aineistoja."
 " Aineistoehdotuksiin ei vastata."
 
-#: app.py:226
-msgid "Thank you for your feedback!"
-msgstr "Kiitos palautteesta!"
+#: app.py:122
+msgid ""
+"Messages sent through this feedback form will include the device's "
+"manufacturer, model, and application version to help locate errors. Our "
+"privacy policy can be found here: "
+msgstr "Palautteen lähettäminen kerää laitteen, valmistajan ja sovelluksen versiotiedot, jotta ilmoitettuja virheitä on helpompi tunnistaa. Tietosuojaselosteemme on luettavissa täällä: "
 
-#: app.py:232
-msgid "There was a problem sending your message."
-msgstr "Viestin lähetyksessä tapahtui virhe."
+#: forms/feedback.py:18
+msgid "Please select a valid municipality."
+msgstr "Valinta on pakollinen."
 
-#~ msgid "Software version"
-#~ msgstr ""
+#: forms/feedback.py:22
+msgid "Subject"
+msgstr "Aihe"
 
-#~ msgid "My home municipality is missing from this list"
-#~ msgstr "Kotikuntani puuttuu tästä listasta"
+#: forms/feedback.py:24
+msgid "General feedback"
+msgstr "Yleinen palaute"
 
-#~ msgid "I don't want to say"
-#~ msgstr "En halua kertoa"
+#: forms/feedback.py:25 utils/email_utils.py:12
+msgid "Suggest a new book or magazine"
+msgstr "Aineiston hankintaehdotus"
+
+#: forms/feedback.py:26
+msgid "Report a technical problem"
+msgstr "Tekninen ongelma"
+
+#: forms/feedback.py:27
+msgid "Other feedback"
+msgstr "Muu palaute"
+
+#: forms/feedback.py:29
+msgid ""
+"Select the subject of your feedback. Please note that if you make a "
+"suggestion about the same book or magazine from the same device, it will "
+"not be handled."
+msgstr "Valitse palautteesi aihe. Huomioithan, että samasta laitteesta lähetettyjä samaa aineistoa koskevia hankintaehdotuksia ei käsitellä. Aineiston hankintaehdotuksiin ei vastata."
+
+#: forms/feedback.py:33
+msgid "Manufacturer"
+msgstr ""
+
+#: forms/feedback.py:34
+msgid "Device model"
+msgstr ""
+
+#: forms/feedback.py:35
+msgid "Software version name"
+msgstr ""
+
+#: forms/feedback.py:36
+msgid "Software version code"
+msgstr ""
+
+#: forms/feedback.py:37
+msgid "Commit"
+msgstr ""
+
+#: forms/feedback.py:39
+msgid "Book name"
+msgstr "Kirjan nimi"
+
+#: forms/feedback.py:42
+msgid "Message"
+msgstr "Viesti"
+
+#: forms/feedback.py:47
+msgid "My home municipality that receives this feedback"
+msgstr "Kotikuntani, jolle palaute osoitetaan"
+
+#: forms/feedback.py:48
+msgid "Select a municipality"
+msgstr "Valitse kotikunta"
+
+#: forms/feedback.py:55
+msgid ""
+"Your home municipality is needed to direct your feedback to the right "
+"library."
+msgstr "Kotikunnan valitseminen ohjaa palautteen oikeaan kirjastoon."
+
+#: forms/feedback.py:59
+msgid "Email address, if you want an answer to your feedback (Optional)"
+msgstr "Sähköpostiosoite, johon haluat vastauksen palautteellesi (Valinnainen)"
+
+#: forms/feedback.py:63
+msgid "Send"
+msgstr "Lähetä"
+
 
