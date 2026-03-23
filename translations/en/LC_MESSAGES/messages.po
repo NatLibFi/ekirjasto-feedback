@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-08-23 09:07+0300\n"
+"POT-Creation-Date: 2026-03-20 15:27+0200\n"
 "PO-Revision-Date: 2024-04-16 17:50+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -18,110 +18,124 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.14.0\n"
 
-#: app.py:53
-msgid "Please select a valid municipality."
+#: app.py:47
+msgid "Thank you for your feedback!"
 msgstr ""
 
-#: app.py:57
-msgid "Subject"
-msgstr ""
-
-#: app.py:59
-msgid "General feedback"
-msgstr ""
-
-#: app.py:60
-msgid "Material procurement"
-msgstr ""
-
-#: app.py:61
-msgid "Material error"
-msgstr ""
-
-#: app.py:62
-msgid "Technical problem"
-msgstr ""
-
-#: app.py:63
-msgid "Other"
-msgstr ""
-
-#: app.py:66
-msgid "Manufacturer"
-msgstr ""
-
-#: app.py:67
-msgid "Device model"
-msgstr ""
-
-#: app.py:68
-msgid "Software version name"
-msgstr ""
-
-#: app.py:69
-msgid "Software version code"
+#: app.py:52 app.py:87
+msgid "There was a problem sending your message."
 msgstr ""
 
 #: app.py:70
-msgid "Commit"
+msgid ""
+"You have already sent feedback within the last minute. Please wait before"
+" sending again."
 msgstr ""
 
-#: app.py:72
-msgid "Book name"
-msgstr ""
-
-#: app.py:75
-msgid "Message"
-msgstr ""
-
-#: app.py:81
-msgid "My home municipality that receives this feedback"
-msgstr ""
-
-#: app.py:82
-msgid "Select a municipality"
-msgstr ""
-
-#: app.py:91
-msgid "Email address, if you want an answer to your feedback (Optional)"
-msgstr ""
-
-#: app.py:95
-msgid "Send"
-msgstr ""
-
-#: app.py:144
+#: app.py:108
 msgid "English"
 msgstr ""
 
-#: app.py:145
+#: app.py:109
 msgid "Finnish"
 msgstr "Suomi"
 
-#: app.py:146
+#: app.py:110
 msgid "Swedish"
 msgstr "Svenska"
 
-#: app.py:155
+#: app.py:112
 msgid ""
 "You can leave feedback about the E-library or suggest materials for "
 "acquisition. Suggestions for materials will not be responded to."
 msgstr ""
 
-#: app.py:226
-msgid "Thank you for your feedback!"
+#: app.py:122
+msgid ""
+"Messages sent through this feedback form will include the device's "
+"manufacturer, model, and application version to help locate errors. Our "
+"privacy policy can be found here: "
 msgstr ""
 
-#: app.py:232
-msgid "There was a problem sending your message."
+#: forms/feedback.py:18
+msgid "Please select a valid municipality."
 msgstr ""
 
-#~ msgid "Software version"
-#~ msgstr ""
+#: forms/feedback.py:22
+msgid "Subject"
+msgstr ""
 
-#~ msgid "My home municipality is missing from this list"
-#~ msgstr ""
+#: forms/feedback.py:24
+msgid "General feedback"
+msgstr ""
 
-#~ msgid "I don't want to say"
-#~ msgstr ""
+#: forms/feedback.py:25 utils/email_utils.py:12
+msgid "Suggest a new book or magazine"
+msgstr ""
+
+#: forms/feedback.py:26
+msgid "Report a technical problem"
+msgstr ""
+
+#: forms/feedback.py:27
+msgid "Other feedback"
+msgstr ""
+
+#: forms/feedback.py:29
+msgid ""
+"Select the subject of your feedback. Please note that if you make a "
+"suggestion about the same book or magazine from the same device, it will "
+"not be handled."
+msgstr ""
+
+#: forms/feedback.py:33
+msgid "Manufacturer"
+msgstr ""
+
+#: forms/feedback.py:34
+msgid "Device model"
+msgstr ""
+
+#: forms/feedback.py:35
+msgid "Software version name"
+msgstr ""
+
+#: forms/feedback.py:36
+msgid "Software version code"
+msgstr ""
+
+#: forms/feedback.py:37
+msgid "Commit"
+msgstr ""
+
+#: forms/feedback.py:39
+msgid "Book name"
+msgstr ""
+
+#: forms/feedback.py:42
+msgid "Message"
+msgstr ""
+
+#: forms/feedback.py:47
+msgid "My home municipality that receives this feedback"
+msgstr ""
+
+#: forms/feedback.py:48
+msgid "Select a municipality"
+msgstr ""
+
+#: forms/feedback.py:55
+msgid ""
+"Your home municipality is needed to direct your feedback to the right "
+"library."
+msgstr ""
+
+#: forms/feedback.py:59
+msgid "Email address, if you want an answer to your feedback (Optional)"
+msgstr ""
+
+#: forms/feedback.py:63
+msgid "Send"
+msgstr ""
+
 

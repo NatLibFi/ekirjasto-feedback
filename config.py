@@ -15,3 +15,7 @@ app.config["LANGUAGES"] = {
     "fi": "Finnish",
     "sv": "Swedish",
 }
+
+# Allow session cookie in cross-origin iframe
+app.config["SESSION_COOKIE_SAMESITE"] = "None"
+app.config["SESSION_COOKIE_SECURE"] = True

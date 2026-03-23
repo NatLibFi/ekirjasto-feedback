@@ -1,46 +1,30 @@
 from config import app
 
 import secrets
-import smtplib
 import os
 
 from datetime import datetime
 
-from flask import request, render_template, redirect, url_for
-
+from flask import request, render_template, redirect, url_for, session
 from flask_bootstrap import Bootstrap5
-
-from flask_wtf import FlaskForm, CSRFProtect
-from wtforms import (
-    StringField,
-    HiddenField,
-    TextAreaField,
-    EmailField,
-    SelectField,
-    SubmitField,
-    validators,
-    ValidationError
-)
-
+from flask_wtf import CSRFProtect
 from flask_babel import lazy_gettext as _
 from flask_babel import Babel
 
-from municipalities import indexed_municipalities, index_to_email, index_to_name
+from municipalities import index_to_email, index_to_name
+from utils.email_utils import set_recipients, build_feedback_body, send_email
+from forms.feedback import FeedbackForm
 
-from email.message import EmailMessage
 import nh3
 
 # root path of the application can be set with the ROOT_PATH environment variable
 # If not set, it defaults to /
 root_path = os.environ.get("ROOT_PATH", "/")
 
-
 def get_locale():
     return request.args.get("lang") or "fi"
 
-
 babel = Babel(app, locale_selector=get_locale)
-
 
 # Bootstrap-Flask requires this line
 bootstrap = Bootstrap5(app)
@@ -48,185 +32,106 @@ bootstrap = Bootstrap5(app)
 csrf = CSRFProtect(app)
 app.secret_key = secrets.token_urlsafe(16)
 
-def validate_municipality(form, field):
-    if field.data == "":
-        raise ValidationError(_("Please select a valid municipality."))
-
-class FeedbackForm(FlaskForm):
-    subject = SelectField(
-        _("Subject"),
-        choices=[
-            (_("General feedback")),
-            (_("Material procurement")),
-            (_("Material error")),
-            (_("Technical problem")),
-            (_("Other")),
-        ],
-    )
-    device_manufacturer = HiddenField(_("Manufacturer"), [validators.Optional()])
-    device_model = HiddenField(_("Device model"), [validators.Optional()])
-    version_name = HiddenField(_("Software version name"), [validators.Optional()])
-    version_code = HiddenField(_("Software version code"), [validators.Optional()])
-    commit = HiddenField(_("Commit"), [validators.Optional()])
-    book_name = StringField(
-        _("Book name"), [validators.Optional(), validators.Length(1, 128)]
-    )
-    message = TextAreaField(
-        _("Message"),
-        [validators.DataRequired(), validators.Length(1, 2048)],
-    )
-    
-    municipality = SelectField(
-        _("My home municipality that receives this feedback"),
-        choices=[("", _("Select a municipality"))] + indexed_municipalities(),
-        render_kw={
-            "class": "form-select",
-            "data-control": "select2",
-            "data-dropdown-parent": "body",
-        },
-        validators=[validate_municipality]
-    )
-    email = EmailField(
-        _("Email address, if you want an answer to your feedback (Optional)"),
-        [validators.Optional()],
-    )
-    submit = SubmitField(
-        _("Send"),
-    )
-
+# The main route for the feedback form
 @app.route(root_path, methods=["GET", "POST"])
 def feedback(name=None):
     form = FeedbackForm()
-
+    ## Handle form submission
     if request.method == "POST" and form.validate():
-        subject = form.subject.data
-        municipality_id = int(form.municipality.data)
-        municipality_name = index_to_name(municipality_id)
-        municipality_email = index_to_email(municipality_id)
+        return handle_feedback_post(form)
+    # If not POST, render the feedback form page
+    populate_form_for_get(form)
+    return render_feedback_page(form)
 
-        subject = f"E-Kirjasto palaute - {municipality_name}: {subject}"
-        recipients = [
-            municipality_email,
-            app.config["ALWAYS_RECIPIENT"],
-        ]
+# Success and error routes
+@app.route(root_path + "/success")
+def success(name="success"):
+    return render_template("success.html", thanks=_("Thank you for your feedback!"))
 
-        body = nh3.clean(form.message.data)
-        reply_to = nh3.clean(form.email.data)
-        book_name = nh3.clean(form.book_name.data)
-        device_model = nh3.clean(form.device_model.data)
-        device_manufacturer = nh3.clean(form.device_manufacturer.data)
-        version_name = nh3.clean(form.version_name.data)
-        version_code = nh3.clean(form.version_code.data)
-        commit = nh3.clean(form.commit.data)
-        user_agent = request.headers.get("User-Agent")
+@app.route(root_path + "/error")
+def error(name="error"):
+    # Accept error message as query parameter, fallback to default
+    error_msg = request.args.get("error") or _( "There was a problem sending your message.")
+    return render_template(
+        "error.html", error=error_msg
+    ), 400
 
-        body += f"\n\nHaluan vastauksen osoitteeseen: {reply_to}"
-        body += f"\n\nKirjan nimi: {book_name}"
-        body += (
-            f"\n\nLaitteen malli ja valmistaja: {device_manufacturer} {device_model}"
-        )
-        body += (
-            f"\n\nOhjelmistoversio: {version_name} ({version_code}) (commit: {commit})"
-        )
-        body += f"\n\nUser agent: {user_agent}"
+def handle_feedback_post(form):
+    """
+    Handle POST request for feedback form.
+    
+    Returns:
+        A redirect to either the success or error page based on the outcome of sending the email.
+    """
+    now = datetime.now()
+    # Check if user has sent feedback in the last minute to prevent spam.
+    last_feedback_time = session.get("last_feedback_time")
+    if last_feedback_time:
+        last_feedback_dt = datetime.fromisoformat(last_feedback_time)
+        if (now - last_feedback_dt).total_seconds() < 60:
+            error_msg = _("You have already sent feedback within the last minute. Please wait before sending again.")
+            return redirect(url_for("error", error=error_msg))
 
-        sent = send_email(subject, body, reply_to, recipients)
+    session["last_feedback_time"] = now.isoformat()
+    form_subject = form.subject.data
+    municipality_id = int(form.municipality.data)
+    municipality_name = index_to_name(municipality_id)
+    municipality_email = index_to_email(municipality_id)
+    recipients = set_recipients(form_subject, municipality_email)
+    email_subject = f"E-Kirjasto palaute - {municipality_name}: {form_subject}"
+    user_agent = request.headers.get("User-Agent")
+    body = build_feedback_body(form, user_agent)
 
-        if sent:
-            return redirect(url_for("success"))
-        else:
-            return redirect(url_for("error"))
+    sent = send_email(email_subject, body, nh3.clean(form.email.data), recipients)
+    if sent:
+        return redirect(url_for("success"))
+    else:
+        error_msg = _("There was a problem sending your message.")
+        return redirect(url_for("error", error=error_msg))
 
-    # Getting these from config.py with translation didn't seem to work
-    # Note that these are "translated" into the original language so every language displays "English" so you always find it
-    languages = {
-        "en": _("English"),
-        "fi": _("Finnish"),
-        "sv": _("Swedish"),
-    }
+def populate_form_for_get(form):
+    """
+    Populate form fields from GET request args.
 
+    """
     form.device_manufacturer.data = request.args.get("device_manufacturer")
     form.device_model.data = request.args.get("device_model")
     form.version_name.data = request.args.get("version_name")
     form.version_code.data = request.args.get("version_code")
     form.commit.data = request.args.get("commit")
 
+def render_feedback_page(form):
+    """
+    Render feedback page for GET request.
+    
+    Returns:    Rendered feedback page with form and additional info.
+    """
+    languages = {
+        "en": _("English"),
+        "fi": _("Finnish"),
+        "sv": _("Swedish"),
+    }
     info_text = _(
         "You can leave feedback about the E-library or suggest materials for acquisition. Suggestions for materials will not be responded to."
     )
+    privacy_policy_urls = {
+        "fi": "https://www.kansalliskirjasto.fi/fi/e-kirjasto/e-kirjaston-tietosuoja-ja-rekisteriseloste",
+        "sv": "https://www.kansalliskirjasto.fi/sv/e-biblioteket/dataskydds-och-registerbeskrivning",
+        "en": "https://www.kansalliskirjasto.fi/en/e-library/privacy-policy-data-protection-statement-and-description-data-file",
+    }
+    locale = get_locale()
+    policy_url = privacy_policy_urls.get(locale, privacy_policy_urls["en"])
+    info_policy = _(
+        "Messages sent through this feedback form will include the device's manufacturer, model, and application version to help locate errors. Our privacy policy can be found here: "
+    ) + f'<a href="{policy_url}" target="_blank">{policy_url}</a>'
 
+    parent_origin = app.config.get("PARENT_ORIGIN", "*")
     return render_template(
         "feedback.html",
         form=form,
         languages=languages,
-        selected_language=get_locale(),
+        selected_language=locale,
         info_text=info_text,
+        info_policy=info_policy,
+        parent_origin=parent_origin,
     )
-
-
-def send_email(subject, body, reply_to, recipients):
-    """Function that sends emails to recipients.
-
-    Args:
-        subject (str): the subject field of the email message to be sent
-        body (str): the text body of the email being sent
-        reply_to (str): The Reply-To header value
-        recipients (list): List of recipients
-
-    Returns:
-        bool: Return value is True if message was sent or False if not
-    """
-
-    # Prevents duplicates
-    recipients = list(set(recipients))
-    message = EmailMessage()
-
-    message.set_content(body)
-    message["To"] = ",".join(recipients)
-    message["From"] = app.config["MAIL_FROM"]
-    message["Sender"] = app.config["MAIL_SENDER"]
-    message["Subject"] = subject
-    # Setting the Reply-To header here so that replying to emails is more convenient
-    if reply_to:
-        message["Reply-To"] = reply_to
-
-    server = app.config["MAIL_SERVER"]
-    port = app.config["MAIL_PORT"]
-    sender_email = app.config["MAIL_SENDER"]
-
-    try:
-        with smtplib.SMTP(server, port) as server:
-            server.sendmail(sender_email, recipients, message.as_string())
-            server.close()
-    except Exception as exception:
-        time = datetime.now()
-        save_message(
-            f"exception: {exception}\n{time}\nTO: {recipients}\n{subject}\n{body}\n\n"
-        )
-        return False
-    return True
-
-
-def save_message(message):
-    """
-    If sending the email fails for any reason, this is used to save the message to disk as a backup
-    """
-    try:
-        f = open(app.config["BACKUP_FILE"], "a", encoding="utf-8")
-        f.write(message)
-    except Exception as exception:
-        print(exception)
-        return False
-    return True
-
-
-@app.route(root_path + "/success")
-def success(name="success"):
-    return render_template("success.html", thanks=_("Thank you for your feedback!"))
-
-
-@app.route(root_path + "/error")
-def error(name="error"):
-    return render_template(
-        "error.html", error=_("There was a problem sending your message.")
-    ), 400
