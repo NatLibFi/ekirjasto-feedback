@@ -63,6 +63,11 @@ def handle_feedback_post(form):
     Returns:
         A redirect to either the success or error page based on the outcome of sending the email.
     """
+    if form.hp_field.data:
+        # Honeypot field is filled, likely a bot. Silently ignore and redirect to error page without sending email. No need to localize.
+        error_msg = "Bot detected"
+        return redirect(url_for("error", error=error_msg))
+    
     now = datetime.now()
     # Check if user has sent feedback in the last minute to prevent spam.
     last_feedback_time = session.get("last_feedback_time")

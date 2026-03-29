@@ -42,6 +42,8 @@ class FeedbackForm(FlaskForm):
         _("Message"),
         [validators.DataRequired(), validators.Length(1, 2048)],
     )
+    # Honeypot field for bot detection
+    hp_field = HiddenField("Hidden", [validators.Length(max=20)])
     
     municipality = SelectField(
         _("My home municipality that receives this feedback"),
