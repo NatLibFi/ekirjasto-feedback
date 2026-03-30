@@ -52,6 +52,11 @@ def test_feedback_empty_honeypot_allows_message_send(client):
             'hp_field': '',  # Human leaves honeypot empty
             'csrf_token': csrf_token,
             'submit': 'Send',
+            'device_manufacturer': 'Test Manufacturer',
+            'device_model': 'Test Model',
+            'version_name': '1.0',
+            'version_code': '1',
+            'commit': 'abc123',
         }
         with patch('smtplib.SMTP', MagicMock()):
             post_response = client.post(url_for('feedback'), data=data, follow_redirects=True)
@@ -75,9 +80,13 @@ def test_feedback_invalid_municipality_renders_form(client):
             'hp_field': '',
             'csrf_token': csrf_token,
             'submit': 'Send',
+            'device_manufacturer': 'Test Manufacturer',
+            'device_model': 'Test Model',
+            'version_name': '1.0',
+            'version_code': '1',
+            'commit': 'abc123',
         }
         with patch('smtplib.SMTP', MagicMock()):
             post_response = client.post(url_for('feedback'), data=data, follow_redirects=True)
             # Should show an error message or re-render the form with errors
             assert post_response.status_code == 200
-
