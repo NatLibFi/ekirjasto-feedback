@@ -29,6 +29,13 @@ The app will run in
 
 To view the form in web-patron, change the Footer's Feedback link to point to your local instance above.
 
+# Testing
+
+Install the needed dependencies to run unit tests:
+`pip install -r requirements-dev.txt`
+and run
+`python -m pytest`
+
 # Translations
 
 To update the translations, run this:
