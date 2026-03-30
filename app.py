@@ -141,7 +141,7 @@ def render_feedback_page(form):
         "Messages sent through this feedback form will include the device's manufacturer, model, and application version to help locate errors. Our privacy policy can be found here: "
     ) + f'<a href="{policy_url}" target="_blank">{policy_url}</a>'
 
-    parent_origin = app.config.get("PARENT_ORIGIN", "*")
+    parent_origin = app.config.get("PARENT_ORIGIN") # No fallback when in prod!
     return render_template(
         "feedback.html",
         form=form,
