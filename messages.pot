@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-03-20 15:27+0200\n"
+"POT-Creation-Date: 2026-03-30 17:08+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,39 +17,45 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.14.0\n"
 
-#: app.py:47
+#: app.py:51
 msgid "Thank you for your feedback!"
 msgstr ""
 
-#: app.py:52 app.py:87
+#: app.py:56 app.py:105
 msgid "There was a problem sending your message."
 msgstr ""
 
-#: app.py:70
+#: app.py:66
+msgid ""
+"There was a problem sending your message. Please refresh the page and try"
+" again."
+msgstr ""
+
+#: app.py:88
 msgid ""
 "You have already sent feedback within the last minute. Please wait before"
 " sending again."
 msgstr ""
 
-#: app.py:108
+#: app.py:126
 msgid "English"
 msgstr ""
 
-#: app.py:109
+#: app.py:127
 msgid "Finnish"
 msgstr ""
 
-#: app.py:110
+#: app.py:128
 msgid "Swedish"
 msgstr ""
 
-#: app.py:112
+#: app.py:130
 msgid ""
 "You can leave feedback about the E-library or suggest materials for "
 "acquisition. Suggestions for materials will not be responded to."
 msgstr ""
 
-#: app.py:122
+#: app.py:140
 msgid ""
 "Messages sent through this feedback form will include the device's "
 "manufacturer, model, and application version to help locate errors. Our "
@@ -115,25 +121,25 @@ msgstr ""
 msgid "Message"
 msgstr ""
 
-#: forms/feedback.py:47
+#: forms/feedback.py:49
 msgid "My home municipality that receives this feedback"
 msgstr ""
 
-#: forms/feedback.py:48
+#: forms/feedback.py:50
 msgid "Select a municipality"
 msgstr ""
 
-#: forms/feedback.py:55
+#: forms/feedback.py:57
 msgid ""
 "Your home municipality is needed to direct your feedback to the right "
 "library."
 msgstr ""
 
-#: forms/feedback.py:59
+#: forms/feedback.py:61
 msgid "Email address, if you want an answer to your feedback (Optional)"
 msgstr ""
 
-#: forms/feedback.py:63
+#: forms/feedback.py:65
 msgid "Send"
 msgstr ""
 
