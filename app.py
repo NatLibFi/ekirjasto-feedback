@@ -1,3 +1,5 @@
+from flask_wtf.csrf import CSRFError
+
 from config import app
 
 import secrets
@@ -36,7 +38,7 @@ app.secret_key = secrets.token_urlsafe(16)
 @app.route(root_path, methods=["GET", "POST"])
 def feedback(name=None):
     form = FeedbackForm()
-    ## Handle form submission
+    # Handle form submission
     if request.method == "POST" and form.validate():
         return handle_feedback_post(form)
     # If not POST, render the feedback form page
@@ -56,6 +58,14 @@ def error(name="error"):
         "error.html", error=error_msg
     ), 400
 
+# Handle CSRF errors automatically and show a message for the user. This shouldn't really happen except when the parent
+# app does not match our trusted (known) web parent.
+@app.errorhandler(CSRFError)
+def handle_csrf_error(e):
+    print("CSRF error: ", e.description)
+    error_msg = _("There was a problem sending your message. Please refresh the page and try again.")
+    return render_template("error.html", error=error_msg), 400
+
 def handle_feedback_post(form):
     """
     Handle POST request for feedback form.
@@ -64,7 +74,8 @@ def handle_feedback_post(form):
         A redirect to either the success or error page based on the outcome of sending the email.
     """
     if form.hp_field.data:
-        # Honeypot field is filled, likely a bot. Silently ignore and redirect to error page without sending email. No need to localize.
+        # Honeypot field is filled, likely a bot. Silently ignore and redirect to error page without sending email.
+        # No need to localize.
         error_msg = "Bot detected"
         return redirect(url_for("error", error=error_msg))
     
