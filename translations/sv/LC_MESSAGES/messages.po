@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-03-20 15:27+0200\n"
+"POT-Creation-Date: 2026-03-30 17:08+0300\n"
 "PO-Revision-Date: 2024-04-16 16:43+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: sv\n"
@@ -18,33 +18,42 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.14.0\n"
 
-#: app.py:47
+#: app.py:51
 msgid "Thank you for your feedback!"
 msgstr "Tack för din respons!"
 
-#: app.py:52 app.py:87
+#: app.py:56 app.py:105
 msgid "There was a problem sending your message."
 msgstr "Det uppstod ett problem med att skicka ditt meddelande."
 
-#: app.py:70
+#: app.py:66
+#, fuzzy
+msgid ""
+"There was a problem sending your message. Please refresh the page and try"
+" again."
+msgstr "Det uppstod ett problem med att skicka ditt meddelande. Vänligen uppdatera sidan och försök igen."
+
+#: app.py:88
 msgid ""
 "You have already sent feedback within the last minute. Please wait before"
 " sending again."
-msgstr "Du har redan skickat respons inom de senaste minuterna. Vänta en stund innan du skickar igen."
+msgstr ""
+"Du har redan skickat respons inom de senaste minuterna. Vänta en stund "
+"innan du skickar igen."
 
-#: app.py:108
+#: app.py:126
 msgid "English"
 msgstr "English "
 
-#: app.py:109
+#: app.py:127
 msgid "Finnish"
 msgstr "Suomi "
 
-#: app.py:110
+#: app.py:128
 msgid "Swedish"
 msgstr "Svenska "
 
-#: app.py:112
+#: app.py:130
 msgid ""
 "You can leave feedback about the E-library or suggest materials for "
 "acquisition. Suggestions for materials will not be responded to."
@@ -52,14 +61,14 @@ msgstr ""
 "Du kan lämna feedback om E-biblioteket eller föreslå material för inköp. "
 "Förslag på material kommer inte att besvaras."
 
-#: app.py:122
+#: app.py:140
 msgid ""
 "Messages sent through this feedback form will include the device's "
 "manufacturer, model, and application version to help locate errors. Our "
 "privacy policy can be found here: "
-msgstr "Meddelanden som skickas via detta feedbackformulär kommer att inkludera enhetens
-tillverkare, modell och applikationsversion för att hjälpa till att identifiera fel. Vår
- integritetspolicy finns här: "
+msgstr ""
+"Meddelanden som skickas via detta feedbackformulär kommer att inkludera "
+"enheten"
 
 #: forms/feedback.py:18
 msgid "Please select a valid municipality."
@@ -90,9 +99,30 @@ msgid ""
 "Select the subject of your feedback. Please note that if you make a "
 "suggestion about the same book or magazine from the same device, it will "
 "not be handled."
-msgstr "Välj ämnet för din feedback. Observera att om du lämnar ett "
-"förslag om samma bok eller tidskrift från samma enhet, kommer det "
-"inte att behandlas."
+msgstr ""
+"Välj ämnet för din feedback. Observera att om du lämnar ett förslag om "
+"samma bok eller tidskrift från samma enhet, kommer det inte att "
+"behandlas."
+
+#: forms/feedback.py:33
+msgid "Manufacturer"
+msgstr ""
+
+#: forms/feedback.py:34
+msgid "Device model"
+msgstr ""
+
+#: forms/feedback.py:35
+msgid "Software version name"
+msgstr ""
+
+#: forms/feedback.py:36
+msgid "Software version code"
+msgstr ""
+
+#: forms/feedback.py:37
+msgid "Commit"
+msgstr ""
 
 #: forms/feedback.py:39
 msgid "Book name"
@@ -102,26 +132,25 @@ msgstr "Bokens namn"
 msgid "Message"
 msgstr "Meddelande"
 
-#: forms/feedback.py:47
+#: forms/feedback.py:49
 msgid "My home municipality that receives this feedback"
 msgstr "Min hemkommun som tar emot denna respons"
 
-#: forms/feedback.py:48
+#: forms/feedback.py:50
 msgid "Select a municipality"
 msgstr "Välj din hemkommun"
 
-#: forms/feedback.py:55
+#: forms/feedback.py:57
 msgid ""
 "Your home municipality is needed to direct your feedback to the right "
 "library."
 msgstr "Din hemkommun behövs för att rikta din feedback till rätt bibliotek"
 
-#: forms/feedback.py:59
+#: forms/feedback.py:61
 msgid "Email address, if you want an answer to your feedback (Optional)"
 msgstr "Epostaddress, om du vill ha svar på din respons (Valfritt)"
 
-#: forms/feedback.py:63
+#: forms/feedback.py:65
 msgid "Send"
 msgstr "Skicka"
-
 
