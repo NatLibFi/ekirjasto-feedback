@@ -9,8 +9,12 @@ from flask_babel import lazy_gettext as _
 def set_recipients(subject, municipality_email):
     """Return recipient list based on subject."""
     always_recipient = app.config["ALWAYS_RECIPIENT"]
+    default_receiver = app.config["DEFAULT_RECEIVER"]
+
+    # Match by english subject, so if strings are changed in the future,
+    # this will need to be updated as well
     if subject == _("Suggest a new book or magazine"):
-        return [always_recipient]
+        return [default_receiver, always_recipient]
     return [municipality_email, always_recipient]
 
 def build_feedback_body(form, user_agent):
