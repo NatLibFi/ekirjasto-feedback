@@ -13,7 +13,11 @@ from flask_wtf import CSRFProtect
 from flask_babel import lazy_gettext as _
 from flask_babel import Babel
 
-from municipalities import index_to_email, index_to_name
+from municipalities import (
+    MunicipalityRegistryUnavailable,
+    index_to_email,
+    index_to_name,
+)
 from utils.email_utils import set_recipients, build_feedback_body, send_email
 from forms.feedback import FeedbackForm
 
@@ -37,7 +41,13 @@ app.secret_key = secrets.token_urlsafe(16)
 # The main route for the feedback form
 @app.route(root_path, methods=["GET", "POST"])
 def feedback(name=None):
-    form = FeedbackForm()
+    try:
+        form = FeedbackForm()
+    except MunicipalityRegistryUnavailable:
+        return render_template(
+            "error.html",
+            error=_("There was a problem sending your message."),
+        ), 503
     # Handle form submission
     if request.method == "POST" and form.validate():
         return handle_feedback_post(form)
@@ -90,7 +100,7 @@ def handle_feedback_post(form):
 
     session["last_feedback_time"] = now.isoformat()
     form_subject = form.subject.data
-    municipality_id = int(form.municipality.data)
+    municipality_id = form.municipality.data
     municipality_name = index_to_name(municipality_id)
     municipality_email = index_to_email(municipality_id)
     recipients = set_recipients(form_subject, municipality_email)

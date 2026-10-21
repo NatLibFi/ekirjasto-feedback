@@ -14,8 +14,10 @@ def set_recipients(subject, municipality_email):
     # Match by english subject, so if strings are changed in the future,
     # this will need to be updated as well
     if subject == _("Suggest a new book or magazine"):
-        return [default_receiver, always_recipient]
-    return [municipality_email, always_recipient]
+        recipients = [default_receiver, always_recipient]
+    else:
+        recipients = [municipality_email or default_receiver, always_recipient]
+    return list(dict.fromkeys(address for address in recipients if address))
 
 def build_feedback_body(form, user_agent):
     """Build the email body from form data and user agent."""

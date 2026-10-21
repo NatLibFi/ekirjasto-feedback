@@ -47,7 +47,7 @@ class FeedbackForm(FlaskForm):
     
     municipality = SelectField(
         _("My home municipality that receives this feedback"),
-        choices=[("", _("Select a municipality"))] + indexed_municipalities(),
+        choices=[],
         render_kw={
             "class": "form-select",
             "data-control": "select2",
@@ -64,3 +64,9 @@ class FeedbackForm(FlaskForm):
     submit = SubmitField(
         _("Send"),
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.municipality.choices = [
+            ("", _("Select a municipality"))
+        ] + indexed_municipalities()
