@@ -37,6 +37,9 @@ def test_feedback_honeypot_prevents_message_send(client):
 
         data = {
             'subject': 'Yleinen palaute',
+            'feedback_target': 'android',
+            'acquisition_type': '',
+            'book_format': '',
             'book_name':'Testikirja',
             'message': 'Testiviesti',
             'municipality': '001',
@@ -59,6 +62,9 @@ def test_feedback_empty_honeypot_allows_message_send(client):
 
         data = {
             'subject': 'Yleinen palaute',
+            'feedback_target': 'android',
+            'acquisition_type': '',
+            'book_format': '',
             'book_name': 'Testikirja',
             'message': 'Testiviesti',
             'municipality': '001',
@@ -89,6 +95,9 @@ def test_feedback_invalid_municipality_renders_form(client):
 
         data = {
             'subject': 'Yleinen palaute',
+            'feedback_target': 'android',
+            'acquisition_type': '',
+            'book_format': '',
             'book_name': 'Testikirja',
             'message': 'Testiviesti',
             'municipality': '9999',  # Invalid value
