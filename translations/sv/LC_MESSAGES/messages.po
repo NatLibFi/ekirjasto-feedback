@@ -68,11 +68,24 @@ msgid ""
 "privacy policy can be found here: "
 msgstr ""
 "Meddelanden som skickas via detta feedbackformulär kommer att inkludera "
-"enheten"
+"enhetens tillverkare och modell samt applikationens version för att underlätta "
+"felsökning. Vår dataskyddsbeskrivning finns här: "
 
 #: forms/feedback.py:18
 msgid "Please select a valid municipality."
 msgstr "Vänligen välj en giltig kommun."
+
+msgid "Please enter the book name."
+msgstr "Ange bokens namn."
+
+msgid "Please select the book format."
+msgstr "Välj bokens format."
+
+msgid "Please select what your feedback concerns."
+msgstr "Välj vad din respons gäller."
+
+msgid "Please select an acquisition suggestion type."
+msgstr "Välj materialtyp för inköpsförslaget."
 
 #: forms/feedback.py:22
 msgid "Subject"
@@ -90,9 +103,50 @@ msgstr "Föreslå en ny bok eller tidskrift"
 msgid "Report a technical problem"
 msgstr "Rapportera ett tekniskt problem"
 
-#: forms/feedback.py:27
-msgid "Other feedback"
-msgstr "Annan respons"
+msgid "What does your feedback concern?"
+msgstr "Vad gäller din respons?"
+
+msgid "Which type of material are you suggesting?"
+msgstr "Vilken typ av material föreslår du att biblioteket köper in?"
+
+msgid "Select an item type"
+msgstr "Välj materialtyp"
+
+msgid "A book"
+msgstr "En bok"
+
+msgid "An audiobook"
+msgstr "En ljudbok"
+
+msgid "Either"
+msgstr "Vilket som"
+
+msgid "A magazine"
+msgstr "En tidskrift"
+
+msgid "Select what your feedback concerns"
+msgstr "Välj vad din respons gäller"
+
+msgid "Android app"
+msgstr "Android-appen"
+
+msgid "iOS app"
+msgstr "iOS-appen"
+
+msgid "Web interface"
+msgstr "Webbgränssnittet"
+
+msgid "Books and audiobooks"
+msgstr "Böcker och ljudböcker"
+
+msgid "Magazines"
+msgstr "Tidskrifter"
+
+msgid "Login"
+msgstr "Inloggning"
+
+msgid "Other"
+msgstr "Annat"
 
 #: forms/feedback.py:29
 msgid ""
@@ -128,6 +182,24 @@ msgstr ""
 msgid "Book name"
 msgstr "Bokens namn"
 
+msgid "Book or magazine name"
+msgstr "Bokens eller tidskriftens namn"
+
+msgid "Please note that if you do not provide your email address, we cannot reply to you or ask you for more information."
+msgstr "Observera att om du inte anger din e-postadress kan vi inte svara dig eller be dig om ytterligare information."
+
+msgid "Book format"
+msgstr "Bokens format"
+
+msgid "Select a format"
+msgstr "Välj format"
+
+msgid "E-book"
+msgstr "E-bok"
+
+msgid "Audiobook"
+msgstr "Ljudbok"
+
 #: forms/feedback.py:42
 msgid "Message"
 msgstr "Meddelande"
@@ -154,3 +226,45 @@ msgstr "Epostaddress, om du vill ha svar på din respons (Valfritt)"
 msgid "Send"
 msgstr "Skicka"
 
+
+msgid "E-library feedback"
+msgstr "E-bibliotekets responsformulär"
+
+msgid "Language"
+msgstr "Språk"
+
+msgid "Please check the following fields."
+msgstr "Kontrollera följande fält."
+
+msgid "Sending your feedback…"
+msgstr "Din respons skickas…"
+
+msgid "Please wait one minute before sending feedback again."
+msgstr "Vänta en minut innan du skickar respons igen."
+
+msgid "This form has already been submitted. Open a new form to send more feedback."
+msgstr "Det här formuläret har redan skickats. Öppna ett nytt formulär om du vill skicka mer respons."
+
+msgid "Return to the form"
+msgstr "Tillbaka till formuläret"
+
+msgid "Search municipality"
+msgstr "Sök hemkommun"
+
+msgid "Filter the list, then select your municipality below."
+msgstr "Filtrera listan och välj sedan din hemkommun nedan."
+
+msgid "Describe your feedback in as much detail as possible. For technical problems, tell us what you were doing, what happened, and what you expected to happen."
+msgstr "Beskriv din respons så detaljerat som möjligt. Om du rapporterar ett tekniskt problem, berätta vad du gjorde, vad som hände och vad du förväntade dig skulle hända."
+
+msgid "Your home municipality's library will be the first to respond. If needed, they will forward your message to the right recipient."
+msgstr "Ditt hemkommuns bibliotek svarar i första hand på ditt meddelande. Vid behov vidarebefordrar de det till rätt mottagare."
+
+msgid "Before sending feedback, check whether the FAQ or user guide has a solution to your problem. Find them here:"
+msgstr "Kontrollera innan du skickar respons om det finns en lösning på ditt problem i de vanliga frågorna eller användarhandboken. Du hittar dem här:"
+
+msgid "E-library frequently asked questions"
+msgstr "E-bibliotekets vanliga frågor"
+
+msgid "E-library user guide"
+msgstr "E-bibliotekets användarhandbok"

@@ -74,6 +74,18 @@ msgstr ""
 msgid "Please select a valid municipality."
 msgstr "Valinta on pakollinen."
 
+msgid "Please enter the book name."
+msgstr "Anna kirjan nimi."
+
+msgid "Please select the book format."
+msgstr "Valitse kirjan aineistotyyppi."
+
+msgid "Please select what your feedback concerns."
+msgstr "Valitse, mitä palautteesi koskee."
+
+msgid "Please select an acquisition suggestion type."
+msgstr "Valitse hankintaehdotuksen aineistotyyppi."
+
 #: forms/feedback.py:22
 msgid "Subject"
 msgstr "Aihe"
@@ -90,9 +102,50 @@ msgstr "Aineiston hankintaehdotus"
 msgid "Report a technical problem"
 msgstr "Tekninen ongelma"
 
-#: forms/feedback.py:27
-msgid "Other feedback"
-msgstr "Muu palaute"
+msgid "What does your feedback concern?"
+msgstr "Mitä palautteesi koskee?"
+
+msgid "Which type of material are you suggesting?"
+msgstr "Minkä tyyppistä aineistoa ehdotat hankittavaksi?"
+
+msgid "Select an item type"
+msgstr "Valitse aineistotyyppi"
+
+msgid "A book"
+msgstr "Kirja"
+
+msgid "An audiobook"
+msgstr "Äänikirja"
+
+msgid "Either"
+msgstr "Kumpi vain"
+
+msgid "A magazine"
+msgstr "Lehti"
+
+msgid "Select what your feedback concerns"
+msgstr "Valitse palautteen kohde"
+
+msgid "Android app"
+msgstr "Android-sovellus"
+
+msgid "iOS app"
+msgstr "iOS-sovellus"
+
+msgid "Web interface"
+msgstr "Selainkäyttöliittymä"
+
+msgid "Books and audiobooks"
+msgstr "Kirjat ja äänikirjat"
+
+msgid "Magazines"
+msgstr "Lehdet"
+
+msgid "Login"
+msgstr "Kirjautuminen"
+
+msgid "Other"
+msgstr "Muu"
 
 #: forms/feedback.py:29
 msgid ""
@@ -128,6 +181,24 @@ msgstr ""
 msgid "Book name"
 msgstr "Kirjan nimi"
 
+msgid "Book or magazine name"
+msgstr "Kirjan tai lehden nimi"
+
+msgid "Please note that if you do not provide your email address, we cannot reply to you or ask you for more information."
+msgstr "Huomaathan, että mikäli et anna sähköpostiosoitettasi, emme voi vastata tai kysyä sinulta lisätietoja."
+
+msgid "Book format"
+msgstr "Kirjan aineistotyyppi"
+
+msgid "Select a format"
+msgstr "Valitse aineistotyyppi"
+
+msgid "E-book"
+msgstr "E-kirja"
+
+msgid "Audiobook"
+msgstr "Äänikirja"
+
 #: forms/feedback.py:42
 msgid "Message"
 msgstr "Viesti"
@@ -154,3 +225,45 @@ msgstr "Sähköpostiosoite, johon haluat vastauksen palautteellesi (Valinnainen)
 msgid "Send"
 msgstr "Lähetä"
 
+
+msgid "E-library feedback"
+msgstr "E-kirjaston palautelomake"
+
+msgid "Language"
+msgstr "Kieli"
+
+msgid "Please check the following fields."
+msgstr "Tarkista seuraavat kentät."
+
+msgid "Sending your feedback…"
+msgstr "Palautetta lähetetään…"
+
+msgid "Please wait one minute before sending feedback again."
+msgstr "Odota minuutti ennen seuraavan palautteen lähettämistä."
+
+msgid "This form has already been submitted. Open a new form to send more feedback."
+msgstr "Tämä lomake on jo lähetetty. Avaa uusi lomake, jos haluat lähettää lisää palautetta."
+
+msgid "Return to the form"
+msgstr "Palaa lomakkeelle"
+
+msgid "Search municipality"
+msgstr "Hae kotikuntaa"
+
+msgid "Filter the list, then select your municipality below."
+msgstr "Rajaa listaa haulla ja valitse kotikuntasi alta."
+
+msgid "Describe your feedback in as much detail as possible. For technical problems, tell us what you were doing, what happened, and what you expected to happen."
+msgstr "Kuvaile palautteesi mahdollisimman tarkasti. Jos ilmoitat teknisestä ongelmasta, kerro mitä olit tekemässä, mitä tapahtui ja mitä odotit tapahtuvan."
+
+msgid "Your home municipality's library will be the first to respond. If needed, they will forward your message to the right recipient."
+msgstr "Kotikuntasi kirjasto vastaa ensisijaisesti viestiisi. Tarvittaessa he välittävät viestisi oikealle vastaanottajalle."
+
+msgid "Before sending feedback, check whether the FAQ or user guide has a solution to your problem. Find them here:"
+msgstr "Tarkistathan ennen palautteen lähettämistä, löytyykö ongelmaasi ratkaisu usein kysytyistä kysymyksistä tai käyttöohjeesta. Löydät ne täältä:"
+
+msgid "E-library frequently asked questions"
+msgstr "E-kirjaston usein kysytyt kysymykset"
+
+msgid "E-library user guide"
+msgstr "E-kirjaston käyttöohjeet"
