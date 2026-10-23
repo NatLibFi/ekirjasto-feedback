@@ -14,8 +14,10 @@ def set_recipients(subject, municipality_email):
     # Match by english subject, so if strings are changed in the future,
     # this will need to be updated as well
     if subject == _("Suggest a new book or magazine"):
-        return [default_receiver, always_recipient]
-    return [municipality_email, always_recipient]
+        recipients = [default_receiver, always_recipient]
+    else:
+        recipients = [municipality_email or default_receiver, always_recipient]
+    return list(dict.fromkeys(address for address in recipients if address))
 
 def build_feedback_body(form, user_agent):
     """Build the email body from form data and user agent."""
@@ -27,9 +29,27 @@ def build_feedback_body(form, user_agent):
     version_name = nh3.clean(form.version_name.data)
     version_code = nh3.clean(form.version_code.data)
     commit = nh3.clean(form.commit.data)
+    feedback_target = next(
+        (str(label) for value, label in form.feedback_target.choices if value == form.feedback_target.data),
+        "",
+    )
+    book_format = next(
+        (str(label) for value, label in form.book_format.choices if value == form.book_format.data),
+        "",
+    )
+    acquisition_type = next(
+        (str(label) for value, label in form.acquisition_type.choices if value == form.acquisition_type.data),
+        "",
+    )
 
     body += f"\n\nHaluan vastauksen osoitteeseen: {reply_to}"
+    if feedback_target:
+        body += f"\n\nPalautteen kohde: {feedback_target}"
+    if acquisition_type:
+        body += f"\n\nHankintaehdotuksen tyyppi: {acquisition_type}"
     body += f"\n\nKirjan nimi: {book_name}"
+    if book_format:
+        body += f"\n\nAineistotyyppi: {book_format}"
     body += f"\n\nLaitteen malli ja valmistaja: {device_manufacturer} {device_model}"
     body += f"\n\nOhjelmistoversio: {version_name} ({version_code}) (commit: {commit})"
     body += f"\n\nUser agent: {user_agent}"

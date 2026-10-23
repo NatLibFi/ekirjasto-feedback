@@ -11,9 +11,13 @@ from flask import request, render_template, redirect, url_for, session
 from flask_bootstrap import Bootstrap5
 from flask_wtf import CSRFProtect
 from flask_babel import lazy_gettext as _
-from flask_babel import Babel
+from flask_babel import Babel, force_locale
 
-from municipalities import index_to_email, index_to_name
+from municipalities import (
+    MunicipalityRegistryUnavailable,
+    index_to_email,
+    index_to_name,
+)
 from utils.email_utils import set_recipients, build_feedback_body, send_email
 from forms.feedback import FeedbackForm
 
@@ -24,7 +28,13 @@ import nh3
 root_path = os.environ.get("ROOT_PATH", "/")
 
 def get_locale():
-    return request.args.get("lang") or "fi"
+    language = request.args.get("lang", "fi")
+    return language if language in app.config["LANGUAGES"] else "fi"
+
+
+@app.context_processor
+def page_language():
+    return {"page_language": get_locale()}
 
 babel = Babel(app, locale_selector=get_locale)
 
@@ -37,12 +47,27 @@ app.secret_key = secrets.token_urlsafe(16)
 # The main route for the feedback form
 @app.route(root_path, methods=["GET", "POST"])
 def feedback(name=None):
-    form = FeedbackForm()
+    try:
+        form = FeedbackForm()
+    except MunicipalityRegistryUnavailable:
+        return render_template(
+            "error.html",
+            error=_("There was a problem sending your message."),
+        ), 503
+    # Changing language posts the draft without sending feedback or validating it.
+    previous_language = request.form.get("change_language")
+    if request.method == "POST" and previous_language in app.config["LANGUAGES"]:
+        with force_locale(previous_language):
+            subjects = [str(choice) for choice in form.subject.choices]
+        if form.subject.data in subjects:
+            form.subject.data = str(form.subject.choices[subjects.index(form.subject.data)])
+        return render_feedback_page(form)
     # Handle form submission
     if request.method == "POST" and form.validate():
         return handle_feedback_post(form)
     # If not POST, render the feedback form page
-    populate_form_for_get(form)
+    if request.method == "GET":
+        populate_form_for_get(form)
     return render_feedback_page(form)
 
 # Success and error routes
@@ -77,7 +102,7 @@ def handle_feedback_post(form):
         # Honeypot field is filled, likely a bot. Silently ignore and redirect to error page without sending email.
         # No need to localize.
         error_msg = "Bot detected"
-        return redirect(url_for("error", error=error_msg))
+        return redirect(url_for("error", error=error_msg, lang=get_locale()))
     
     now = datetime.now()
     # Check if user has sent feedback in the last minute to prevent spam.
@@ -86,11 +111,11 @@ def handle_feedback_post(form):
         last_feedback_dt = datetime.fromisoformat(last_feedback_time)
         if (now - last_feedback_dt).total_seconds() < 60:
             error_msg = _("You have already sent feedback within the last minute. Please wait before sending again.")
-            return redirect(url_for("error", error=error_msg))
+            return redirect(url_for("error", error=error_msg, lang=get_locale()))
 
     session["last_feedback_time"] = now.isoformat()
     form_subject = form.subject.data
-    municipality_id = int(form.municipality.data)
+    municipality_id = form.municipality.data
     municipality_name = index_to_name(municipality_id)
     municipality_email = index_to_email(municipality_id)
     recipients = set_recipients(form_subject, municipality_email)
@@ -100,10 +125,10 @@ def handle_feedback_post(form):
 
     sent = send_email(email_subject, body, nh3.clean(form.email.data), recipients)
     if sent:
-        return redirect(url_for("success"))
+        return redirect(url_for("success", lang=get_locale()))
     else:
         error_msg = _("There was a problem sending your message.")
-        return redirect(url_for("error", error=error_msg))
+        return redirect(url_for("error", error=error_msg, lang=get_locale()))
 
 def populate_form_for_get(form):
     """
@@ -150,4 +175,8 @@ def render_feedback_page(form):
         info_text=info_text,
         info_policy=info_policy,
         parent_origin=parent_origin,
+        language_urls={
+            language: url_for("feedback", **{**request.args.to_dict(), "lang": language})
+            for language in languages
+        },
     )

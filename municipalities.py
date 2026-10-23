@@ -1,61 +1,132 @@
-import csv
+"""Load municipality names and feedback recipients from Circulation."""
+
+import logging
+import os
+import time
+
+import httpx
 from config import app
-from flask_babel import lazy_gettext as _
-from flask import Flask
+
+_CACHE_TTL_SECONDS = 86400
+_STALE_RETRY_SECONDS = 60
+_municipalities_cache = None
+_cache_expires_at = 0.0
+
+
+class MunicipalityRegistryUnavailable(RuntimeError):
+    """Raised when no municipality registry is available."""
+
+
+def _configuration(name):
+    return os.environ.get(name) or app.config.get(name)
+
+
+def _normalize_municipalities(rows):
+    if not isinstance(rows, list):
+        raise ValueError("Municipality registry response is invalid.")
+
+    municipalities = []
+    seen_codes = set()
+    for row in rows:
+        if not isinstance(row, dict):
+            raise ValueError("Municipality registry response is invalid.")
+        code = row.get("code")
+        name = row.get("name")
+        if not isinstance(code, str) or not isinstance(name, str):
+            raise ValueError("Municipality registry response is invalid.")
+        code = code.strip()
+        name = name.strip()
+        if not code or not name or code in seen_codes:
+            raise ValueError("Municipality registry response is invalid.")
+        seen_codes.add(code)
+        email = row.get("email")
+        if email is not None and not isinstance(email, str):
+            raise ValueError("Municipality registry response is invalid.")
+        municipalities.append(
+            {
+                "code": code,
+                "name": name,
+                "email": email.strip() or None if email is not None else None,
+            }
+        )
+    if not municipalities:
+        raise ValueError("Municipality registry response is empty.")
+    return municipalities
+
+
+def get_municipalities():
+    """Return cached municipalities, refreshing them from Circulation as needed."""
+    global _municipalities_cache, _cache_expires_at
+
+    if _municipalities_cache is not None and time.monotonic() < _cache_expires_at:
+        return _municipalities_cache
+
+    url = _configuration("FEEDBACK_MUNICIPALITIES_URL")
+    token = _configuration("FEEDBACK_SERVICE_TOKEN")
+    if not url or not token:
+        if _municipalities_cache is not None:
+            logging.warning(
+                "Municipality registry service is not configured; using cached data."
+            )
+            _cache_expires_at = time.monotonic() + _STALE_RETRY_SECONDS
+            return _municipalities_cache
+        logging.error(
+            "Municipality registry service is not configured and no cached data is available."
+        )
+        raise MunicipalityRegistryUnavailable(
+            "Municipality registry service is not configured."
+        )
+
+    try:
+        response = httpx.get(
+            url,
+            headers={"Authorization": f"Bearer {token}"},
+            timeout=5.0,
+        )
+        response.raise_for_status()
+        payload = response.json()
+        municipalities = _normalize_municipalities(payload["municipalities"])
+    except (httpx.HTTPError, KeyError, TypeError, ValueError) as error:
+        if _municipalities_cache is not None:
+            logging.warning(
+                "Could not refresh municipality registry; using cached data (%s).",
+                type(error).__name__,
+            )
+            _cache_expires_at = time.monotonic() + _STALE_RETRY_SECONDS
+            return _municipalities_cache
+        logging.error(
+            "Could not load municipality registry and no cached data is available (%s).",
+            type(error).__name__,
+        )
+        raise MunicipalityRegistryUnavailable(
+            "Could not load the municipality registry."
+        ) from None
+
+    _municipalities_cache = municipalities
+    _cache_expires_at = time.monotonic() + _CACHE_TTL_SECONDS
+    return _municipalities_cache
 
 
 def indexed_municipalities():
-    """
-    turns this:
-    [("example@example.org", "City of Exemplars")]
-    into this:
-    [(0, "City of Exemplars")]
-    You can use index_to_email to reverse it
-    """
-    munis = []
-    i = 0
-    for email, muni in municipalities:
-        munis.append((i, muni))
-        i += 1
-    return munis
+    """Return form choices using municipality codes as stable values."""
+    return [(item["code"], item["name"]) for item in get_municipalities()]
 
 
-def index_to_email(index):
-    return municipalities[index][0]
+def municipality_for_code(code):
+    """Return a municipality record by its stable Koodisto code."""
+    return next(
+        (item for item in get_municipalities() if item["code"] == str(code)),
+        None,
+    )
 
 
-def index_to_name(index):
-    return municipalities[index][1]
+def index_to_email(code):
+    municipality = municipality_for_code(code)
+    return municipality["email"] if municipality else None
 
 
-def get_emails():
-    with open(app.config["EMAILS_CSV"], encoding="utf-8", newline="") as csvfile:
-        email_reader = csv.reader(
-            csvfile,
-            delimiter=",",
-        )
-        emails = []
-        for row in email_reader:
-            email = row[0]
-            name = row[1]
-            emails.append((email, name))
-
-    ######
-    # Sorthing happens by another means: EKIR-270
-    # Sort by the second element in a list of tuples because that's where the municipality names are 
-    # emails = sorted(emails, key=lambda x: x[1])
-
-    # Decorate the emails with some custom values that aren't municipalities
-##    emails.append(
-##        (
-##            app.config["DEFAULT_RECEIVER"],
-##            _("My home municipality is missing from this list"),
-##        ),
-##    )
-##    emails.append((app.config["DEFAULT_RECEIVER"], _("I don't want to say")))
-
-    return emails
-
-
-# Note how this is only read once per startup so you need to restart for a new list to be used
-municipalities = get_emails()
+def index_to_name(code):
+    municipality = municipality_for_code(code)
+    if municipality is None:
+        raise ValueError("Unknown municipality code.")
+    return municipality["name"]

@@ -1,53 +1,85 @@
 {% extends "header.html" %}
 
+{% macro render_field(field, autocomplete=None) %}
+<div class="field{% if field.errors %} field--invalid{% endif %}">
+    <label for="{{ field.id }}">{{ field.label.text }}{% if field.flags.required %}<span aria-hidden="true"> *</span>{% elif field.name in ['book_name', 'book_format', 'feedback_target', 'acquisition_type'] %}<span aria-hidden="true" data-required-indicator hidden> *</span>{% endif %}</label>
+    {% set described_by = [] %}
+    {% if field.description %}{% set ignored = described_by.append(field.id ~ '-help') %}{% endif %}
+    {% if field.errors %}{% set ignored = described_by.append(field.id ~ '-errors') %}{% endif %}
+    {% set attributes = {'class': 'field-control', 'aria-describedby': described_by|join(' ')} %}
+    {% if field.errors %}{% set ignored = attributes.update({'aria-invalid': 'true'}) %}{% endif %}
+    {% if autocomplete %}{% set ignored = attributes.update({'autocomplete': autocomplete}) %}{% endif %}
+    {% if field.name in ['book_name', 'book_format', 'feedback_target', 'acquisition_type'] %}
+        {% set ignored = attributes.update({'aria-required': 'false', 'data-conditional-required': 'true'}) %}
+    {% endif %}
+    {{ field(**attributes) }}
+    {% if field.description %}<p class="field-help" id="{{ field.id }}-help">{{ field.description }}</p>{% endif %}
+    {% if field.errors %}
+    <ul class="field-errors" id="{{ field.id }}-errors">
+        {% for error in field.errors %}<li>{{ error }}</li>{% endfor %}
+    </ul>
+    {% endif %}
+</div>
+{% endmacro %}
+
 {% block content %}
-
-<div class="btn-group justify-content-center" role="group">
+<nav class="languages" aria-label="{{ _('Language') }}">
     {% for language in languages %}
-        <button
-            onclick='window.location.href="?lang={{ language }}";'
-            target="_self" role="button"
-            class="btn
-            {% if language == selected_language %} btn-primary {% else %} btn-secondary {% endif %}
-            "
-            href="/?lang={{ language }}"
-        >
-            {{ languages[language] }}
-        </button>
+    <a href="{{ language_urls[language] }}" data-previous-language="{{ selected_language }}"
+        lang="{{ language }}"{% if language == selected_language %} aria-current="page"{% endif %}
+        class="language{% if language == selected_language %} language--active{% endif %}">
+        {{ languages[language] }}
+    </a>
     {% endfor %}
+</nav>
+
+<h1>{{ _('E-library feedback') }}</h1>
+<p class="introduction">{{ info_text }}</p>
+<p class="privacy">{{ info_policy|safe }}</p>
+
+{% if form.errors %}
+<div class="error-summary" role="alert" tabindex="-1" id="form-errors">
+    <h2>{{ _('Please check the following fields.') }}</h2>
+    <ul>
+    {% for field in form %}
+        {% if field.errors %}<li><a href="#{{ field.id }}">{{ field.label.text }}: {{ field.errors|join(' ') }}</a></li>{% endif %}
+    {% endfor %}
+    </ul>
 </div>
+{% endif %}
 
-<div class="alert alert-light" role="alert" style="margin-bottom:0; padding-bottom:0;">
-    {{ info_text }}
-</div>
-
-<div class="alert alert-light" role="alert">
-    {{ info_policy|safe }}
-</div>
-<p>{{ message|safe }}</p>
-
-<div>
-{{ render_form(form) }}
-</div>
-
-<script>
-    // Send CSRF token to parent window if the feedback app is embedded in an iframe
-    document.addEventListener('DOMContentLoaded', function () {
-        // Get CSRF token from form
-        var csrfTokenInput = document.querySelector('input[name="csrf_token"]');
-        var csrfToken = csrfTokenInput ? csrfTokenInput.value : 'not found';
-        // Only send postMessage if parent window is not the feedback app itself.
-        if (window.parent !== window && window.location !== window.parent.location) {
-            window.parent.postMessage(
-                {
-                    type: 'feedback-csrf-token',
-                    csrfToken: csrfToken
-                },
-                '{{ parent_origin }}'
-            );
-        }
-    });
-</script>
-
+<form id="feedback-form" method="post" data-parent-origin="{{ parent_origin or '' }}"
+    data-acquisition-subject="{{ _('Suggest a new book or magazine') }}">
+    {{ form.hidden_tag() }}
+    <section class="help-resources" aria-labelledby="help-resources-heading">
+        <h2 id="help-resources-heading">{{ _('Before sending feedback, check whether the FAQ or user guide has a solution to your problem. Find them here:') }}</h2>
+        <ul>
+            <li><a href="https://www.kansalliskirjasto.fi/fi/e-kirjasto/e-kirjaston-usein-kysytyt-kysymykset"
+                target="_blank" rel="noopener noreferrer" hreflang="fi">{{ _('E-library frequently asked questions') }}</a></li>
+            <li><a href="https://www.kansalliskirjasto.fi/fi/e-kirjasto/e-kirjasto-sovelluksen-kayttoohje"
+                target="_blank" rel="noopener noreferrer" hreflang="fi">{{ _('E-library user guide') }}</a></li>
+        </ul>
+    </section>
+    {{ render_field(form.subject) }}
+    <div id="feedback-target-field">
+        {{ render_field(form.feedback_target) }}
+    </div>
+    <div id="acquisition-type-field" hidden>
+        {{ render_field(form.acquisition_type) }}
+    </div>
+    <div id="book-details" hidden>
+        {{ render_field(form.book_name) }}
+        {{ render_field(form.book_format) }}
+    </div>
+    {{ render_field(form.message) }}
+    {{ render_field(form.municipality) }}
+    {{ render_field(form.email, 'email') }}
+    <div class="form-actions">
+        {{ form.submit(class='button button--primary') }}
+        <p class="submission-status" role="status" aria-live="polite" aria-atomic="true"
+            data-sending="{{ _('Sending your feedback…') }}"
+            data-wait="{{ _('Please wait one minute before sending feedback again.') }}"
+            data-sent="{{ _('This form has already been submitted. Open a new form to send more feedback.') }}"></p>
+    </div>
+</form>
 {% endblock %}
-

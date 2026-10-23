@@ -1,10 +1,6 @@
 # Intro
 
-This is a simple feedback form that is supposed to be used to send support email to recipients according to a csv.
-
-# Important
-
-If you change the municipalities emails csv file remember to restart the server because the list is only read at startup.
+This is a simple feedback form that sends support email to configured recipients. Municipality names and feedback recipient addresses are loaded from the Circulation municipality registry.
 
 # Development
 
@@ -16,12 +12,16 @@ and activate it
 `. ./venv/bin/activate`
 then install dependencies with
 `pip install -r requirements.txt`.
-Then create a `emails.csv` a few names and emails
+Configure the local Circulation feedback registry endpoint and a development-only shared token. Set the same `FEEDBACK_SERVICE_TOKEN` in both local services, and set `FEEDBACK_MUNICIPALITIES_URL` in this application, for example:
+
 ```sh
-test@testcity.org,Test City
-info@sampletown.org,Sample Town
+export FEEDBACK_MUNICIPALITIES_URL=http://127.0.0.1:6500/internal/feedback/municipalities
+export FEEDBACK_SERVICE_TOKEN=local-development-only-token
 ```
-and run the app with
+
+Configure the same development-only token in the local Circulation service. Do not use production tokens for local development. Use an authenticated HTTPS service URL in deployed environments. The feedback service caches the last successful municipality response in memory for one day and keeps using it if a refresh fails.
+
+Run the app with
 `flask --app app run --debug` when developing.
 
 The app will run in

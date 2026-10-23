@@ -5,7 +5,10 @@ from dotenv import dotenv_values, load_dotenv
 
 load_dotenv()
 
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    static_url_path=os.environ.get("ROOT_PATH", "/").rstrip("/") + "/static",
+)
 
 config = dotenv_values()
 app.config.from_mapping(config)

@@ -66,6 +66,18 @@ msgstr ""
 msgid "Please select a valid municipality."
 msgstr ""
 
+msgid "Please enter the book name."
+msgstr ""
+
+msgid "Please select the book format."
+msgstr ""
+
+msgid "Please select what your feedback concerns."
+msgstr ""
+
+msgid "Please select an acquisition suggestion type."
+msgstr ""
+
 #: forms/feedback.py:22
 msgid "Subject"
 msgstr ""
@@ -82,8 +94,49 @@ msgstr ""
 msgid "Report a technical problem"
 msgstr ""
 
-#: forms/feedback.py:27
-msgid "Other feedback"
+msgid "What does your feedback concern?"
+msgstr ""
+
+msgid "Which type of material are you suggesting?"
+msgstr ""
+
+msgid "Select an item type"
+msgstr ""
+
+msgid "A book"
+msgstr ""
+
+msgid "An audiobook"
+msgstr ""
+
+msgid "Either"
+msgstr ""
+
+msgid "A magazine"
+msgstr ""
+
+msgid "Select what your feedback concerns"
+msgstr ""
+
+msgid "Android app"
+msgstr ""
+
+msgid "iOS app"
+msgstr ""
+
+msgid "Web interface"
+msgstr ""
+
+msgid "Books and audiobooks"
+msgstr ""
+
+msgid "Magazines"
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "Other"
 msgstr ""
 
 #: forms/feedback.py:29
@@ -117,6 +170,24 @@ msgstr ""
 msgid "Book name"
 msgstr ""
 
+msgid "Book or magazine name"
+msgstr ""
+
+msgid "Please note that if you do not provide your email address, we cannot reply to you or ask you for more information."
+msgstr ""
+
+msgid "Book format"
+msgstr ""
+
+msgid "Select a format"
+msgstr ""
+
+msgid "E-book"
+msgstr ""
+
+msgid "Audiobook"
+msgstr ""
+
 #: forms/feedback.py:42
 msgid "Message"
 msgstr ""
@@ -143,3 +214,45 @@ msgstr ""
 msgid "Send"
 msgstr ""
 
+
+msgid "E-library feedback"
+msgstr ""
+
+msgid "Language"
+msgstr ""
+
+msgid "Please check the following fields."
+msgstr ""
+
+msgid "Sending your feedback…"
+msgstr ""
+
+msgid "Please wait one minute before sending feedback again."
+msgstr ""
+
+msgid "This form has already been submitted. Open a new form to send more feedback."
+msgstr ""
+
+msgid "Return to the form"
+msgstr ""
+
+msgid "Search municipality"
+msgstr ""
+
+msgid "Filter the list, then select your municipality below."
+msgstr ""
+
+msgid "Describe your feedback in as much detail as possible. For technical problems, tell us what you were doing, what happened, and what you expected to happen."
+msgstr ""
+
+msgid "Your home municipality's library will be the first to respond. If needed, they will forward your message to the right recipient."
+msgstr ""
+
+msgid "Before sending feedback, check whether the FAQ or user guide has a solution to your problem. Find them here:"
+msgstr ""
+
+msgid "E-library frequently asked questions"
+msgstr ""
+
+msgid "E-library user guide"
+msgstr ""

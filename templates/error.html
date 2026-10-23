@@ -1,4 +1,7 @@
 {% extends "header.html" %}
+{% block page_type %}error{% endblock %}
 {% block content %}
-{{ error }}
+<h1>{{ _('E-library feedback') }}</h1>
+<p class="error-summary" role="alert">{{ error }}</p>
+<button type="button" class="button" id="return-to-form" hidden>{{ _('Return to the form') }}</button>
 {% endblock %}

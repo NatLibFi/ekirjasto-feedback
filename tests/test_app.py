@@ -3,13 +3,27 @@ from flask import url_for
 from app import app as flask_app
 from bs4 import BeautifulSoup
 from unittest.mock import patch, MagicMock
+import municipalities
 
 @pytest.fixture
-def client():
+def client(monkeypatch):
     flask_app.config['TESTING'] = True
     flask_app.config['SERVER_NAME'] = 'localhost'
     flask_app.config['APPLICATION_ROOT'] = '/'
     flask_app.config['PREFERRED_URL_SCHEME'] = 'http'
+    flask_app.config['FEEDBACK_MUNICIPALITIES_URL'] = 'http://circulation.test/internal/feedback/municipalities'
+    flask_app.config['FEEDBACK_SERVICE_TOKEN'] = 'test-service-token'
+    municipalities._municipalities_cache = None
+    municipalities._cache_expires_at = 0.0
+    response = MagicMock()
+    response.json.return_value = {
+        'municipalities': [
+            {'code': '001', 'name': 'Test City', 'email': 'city@example.fi'},
+            {'code': '002', 'name': 'Sample Town', 'email': 'team@example.fi'},
+        ]
+    }
+    response.raise_for_status.return_value = None
+    monkeypatch.setattr(municipalities.httpx, 'get', lambda *args, **kwargs: response)
     with flask_app.test_client() as client:
         yield client
 
@@ -23,9 +37,12 @@ def test_feedback_honeypot_prevents_message_send(client):
 
         data = {
             'subject': 'Yleinen palaute',
+            'feedback_target': 'android',
+            'acquisition_type': '',
+            'book_format': '',
             'book_name':'Testikirja',
             'message': 'Testiviesti',
-            'municipality': '1',
+            'municipality': '001',
             'email': '',
             'hp_field': 'To bot or not to bot',  # Bot leaves us a nice message
             'csrf_token': csrf_token,
@@ -45,9 +62,12 @@ def test_feedback_empty_honeypot_allows_message_send(client):
 
         data = {
             'subject': 'Yleinen palaute',
+            'feedback_target': 'android',
+            'acquisition_type': '',
+            'book_format': '',
             'book_name': 'Testikirja',
             'message': 'Testiviesti',
-            'municipality': 1,
+            'municipality': '001',
             'email': '',
             'hp_field': '',  # Human leaves honeypot empty
             'csrf_token': csrf_token,
@@ -58,10 +78,12 @@ def test_feedback_empty_honeypot_allows_message_send(client):
             'version_code': '1',
             'commit': 'abc123',
         }
-        with patch('smtplib.SMTP', MagicMock()):
+        with patch('smtplib.SMTP') as smtp:
             post_response = client.post(url_for('feedback'), data=data, follow_redirects=True)
             assert post_response.status_code == 200
             assert b'Kiitos palautteesta!' in post_response.data
+            recipients = smtp.return_value.__enter__.return_value.sendmail.call_args.args[1]
+            assert 'city@example.fi' in recipients
 
 def test_feedback_invalid_municipality_renders_form(client):
     """Test that selecting an invalid municipality re-renders the form."""
@@ -73,9 +95,12 @@ def test_feedback_invalid_municipality_renders_form(client):
 
         data = {
             'subject': 'Yleinen palaute',
+            'feedback_target': 'android',
+            'acquisition_type': '',
+            'book_format': '',
             'book_name': 'Testikirja',
             'message': 'Testiviesti',
-            'municipality': 9999,  # Invalid value
+            'municipality': '9999',  # Invalid value
             'email': '',
             'hp_field': '',
             'csrf_token': csrf_token,

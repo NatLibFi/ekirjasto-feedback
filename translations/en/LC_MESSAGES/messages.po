@@ -67,6 +67,18 @@ msgstr ""
 msgid "Please select a valid municipality."
 msgstr ""
 
+msgid "Please enter the book name."
+msgstr "Please enter the book name."
+
+msgid "Please select the book format."
+msgstr "Please select the book format."
+
+msgid "Please select what your feedback concerns."
+msgstr "Please select what your feedback concerns."
+
+msgid "Please select an acquisition suggestion type."
+msgstr "Please select an acquisition suggestion type."
+
 #: forms/feedback.py:22
 msgid "Subject"
 msgstr ""
@@ -83,9 +95,50 @@ msgstr ""
 msgid "Report a technical problem"
 msgstr ""
 
-#: forms/feedback.py:27
-msgid "Other feedback"
-msgstr ""
+msgid "What does your feedback concern?"
+msgstr "What does your feedback concern?"
+
+msgid "Which type of material are you suggesting?"
+msgstr "Which type of material are you suggesting?"
+
+msgid "Select an item type"
+msgstr "Select an item type"
+
+msgid "A book"
+msgstr "A book"
+
+msgid "An audiobook"
+msgstr "An audiobook"
+
+msgid "Either"
+msgstr "Either"
+
+msgid "A magazine"
+msgstr "A magazine"
+
+msgid "Select what your feedback concerns"
+msgstr "Select what your feedback concerns"
+
+msgid "Android app"
+msgstr "Android app"
+
+msgid "iOS app"
+msgstr "iOS app"
+
+msgid "Web interface"
+msgstr "Web interface"
+
+msgid "Books and audiobooks"
+msgstr "Books and audiobooks"
+
+msgid "Magazines"
+msgstr "Magazines"
+
+msgid "Login"
+msgstr "Login"
+
+msgid "Other"
+msgstr "Other"
 
 #: forms/feedback.py:29
 msgid ""
@@ -118,6 +171,24 @@ msgstr ""
 msgid "Book name"
 msgstr ""
 
+msgid "Book or magazine name"
+msgstr "Book or magazine name"
+
+msgid "Please note that if you do not provide your email address, we cannot reply to you or ask you for more information."
+msgstr "Please note that if you do not provide your email address, we cannot reply to you or ask you for more information."
+
+msgid "Book format"
+msgstr "Book format"
+
+msgid "Select a format"
+msgstr "Select a format"
+
+msgid "E-book"
+msgstr "E-book"
+
+msgid "Audiobook"
+msgstr "Audiobook"
+
 #: forms/feedback.py:42
 msgid "Message"
 msgstr ""
@@ -144,3 +215,45 @@ msgstr ""
 msgid "Send"
 msgstr ""
 
+
+msgid "E-library feedback"
+msgstr "E-library feedback"
+
+msgid "Language"
+msgstr "Language"
+
+msgid "Please check the following fields."
+msgstr "Please check the following fields."
+
+msgid "Sending your feedback…"
+msgstr "Sending your feedback…"
+
+msgid "Please wait one minute before sending feedback again."
+msgstr "Please wait one minute before sending feedback again."
+
+msgid "This form has already been submitted. Open a new form to send more feedback."
+msgstr "This form has already been submitted. Open a new form to send more feedback."
+
+msgid "Return to the form"
+msgstr "Return to the form"
+
+msgid "Search municipality"
+msgstr "Search municipality"
+
+msgid "Filter the list, then select your municipality below."
+msgstr "Filter the list, then select your municipality below."
+
+msgid "Describe your feedback in as much detail as possible. For technical problems, tell us what you were doing, what happened, and what you expected to happen."
+msgstr "Describe your feedback in as much detail as possible. For technical problems, tell us what you were doing, what happened, and what you expected to happen."
+
+msgid "Your home municipality's library will be the first to respond. If needed, they will forward your message to the right recipient."
+msgstr "Your home municipality's library will be the first to respond. If needed, they will forward your message to the right recipient."
+
+msgid "Before sending feedback, check whether the FAQ or user guide has a solution to your problem. Find them here:"
+msgstr "Before sending feedback, check whether the frequently asked questions or user guide has a solution to your problem. Find them here:"
+
+msgid "E-library frequently asked questions"
+msgstr "E-library frequently asked questions"
+
+msgid "E-library user guide"
+msgstr "E-library user guide"
